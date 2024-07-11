@@ -19,9 +19,6 @@ from django.urls import path
 from django.conf.urls import include
 from . import myController
 urlpatterns= [
-    path("", myController.index2,
-    name="index"),
-    path("paramsToJson",
-    myController.paramsToJson,
-    name="paramsToJson")
+    path("", myController.esempio_view,  #fa il binding dell'URL a cui appendiamo la stringa vuota e il controller esempio_view 
+    name="index")
 ]

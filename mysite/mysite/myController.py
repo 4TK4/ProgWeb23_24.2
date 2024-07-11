@@ -1,18 +1,8 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse
-def index(request):
-    output1 = "<html> <body>"
-    output2 = "<p>Welcome to DJANGO</p>"
-    output3 = "</body> </html>"
-    return HttpResponse(output1 + output2 + output3)
-def index2(request):
-    response= HttpResponse(
-    content_type="text/html")
-    response.write("<html> <body>")
-    response.write("<p>Welcome to DJANGO again</p>")
-    response.write("</body> </html>")
-    return response
+"""
+esempio slides
 def paramsToJson(request):
     if request.method== "GET":
         params= request.GET
@@ -24,3 +14,41 @@ def paramsToJson(request):
         res = HttpResponse(content_type="application/json")
         res.write(json.dumps(o))
         return res
+"""
+   
+"""
+utilizzo sessioni (potrebbero servirci in futuro) 
+def StartSession(request):
+    res = HttpResponse(content_type="text/html")
+    counter= request.session.get("counter")
+    if counter== None:
+        request.session["counter"] = 1
+        res.write("Session Started")
+    else:
+        res.write("Session alreadystarted")
+    return res
+
+def CloseSession(request):
+    res = HttpResponse(content_type="text/html")
+    counter= request.session.get("counter")
+    if counter!= None:
+        del request.session["counter"]
+        res.write("Session stopped")
+    else:
+        res.write("Session notstarted")
+    return res
+
+def SessionCount(request):
+    res = HttpResponse(content_type="text/html")
+    counter= request.session.get("counter")
+    if counter== None:
+        res.write("No session activated")
+    else:
+        counter+=1;
+        res.write("Counteris{}".format(counter))
+        request.session["counter"]=counter;
+    return res
+"""
+
+def esempio_view(request):
+    return render(request, '../Templates/index.html')   #mando richiesta (contesto) del template che voglio chiamare
