@@ -50,5 +50,14 @@ def SessionCount(request):
     return res
 """
 
-def esempio_view(request):
+def home(request):
     return render(request, '../Templates/index.html')   #mando richiesta (contesto) del template che voglio chiamare
+
+def contrattoTelefonico(request):
+    return render(request, '../Templates/contrattoTelefonico.html')
+
+def sim(request):
+    return render(request, '../Templates/sim.html')
+
+def telefonata(request):
+    return render(request, '../Templates/telefonata.html')

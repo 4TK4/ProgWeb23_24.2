@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Contratto Telefonico{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Contratto Telefonico</h1>
+
+<div class="row">
+    <div class="col-md-2">
+        <!-- Filtro di ricerca -->
+        <form class="form-inline my-2 my-lg-0">
+            <div class="form-group mb-3">
+                <label for="numero_telefono">Numero di telefono:</label>
+                <input type="tel" class="form-control" id="numero_telefono" pattern="[0-9]*{1,10}">
+            </div>
+            <div class="form-group mb-3">
+                <label for="tipologia_contratto">Tipologia contratto:</label>
+                <select class="form-control" id="tipologia_contratto">
+                    <option value="">Qualsiasi tipologia</option>
+                    <option value="a_ricarica">A ricarica</option>
+                    <option value="a_consumo">A consumo</option>
+                </select>
+            </div>
+            <div class="form-group mb-4">
+                <label for="data_attivazione">Data di attivazione:</label>
+                <input type="date" class="form-control" id="data_attivazione">
+            </div>
+            <button class="btn btn-outline-success mb-5" type="submit">Cerca</button> <br>
+            <button class="btn btn-outline-primary" type="button" onclick="">Aggiungi nuovo contratto</button>
+        </form>
+    </div>
+    <div class="col-md-10">
+
+
+        <!-- Tabella dei contratti -->
+        <table class="table table-striped table-spaced">
+            <thead>
+                <tr>
+                    <th class="text-center">Numero</th>
+                    <th class="text-center">Data Attivazione</th>
+                    <th class="text-center">Tipo</th>
+                    <th class="text-center">Minuti Residui</th>
+                    <th class="text-center">Credito Residuo</th>
+                    <th class="text-center">Telefonate</th>
+                    <th class="text-center">SIM Attiva</th>
+                    <th class="text-center">SIM Disattiva</th>
+                    <th class="text-center">Modifica</th>
+                    <th class="text-center">Elimina</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Itera sui contratti -->
+                {% for contratto in contratti %}
+                <tr>
+                    <td class="text-center">{{ contratto.numero }}</td>
+                    <td class="text-center">{{ contratto.data_attivazione }}</td>
+                    <td class="text-center">{{ contratto.tipo }}</td>
+                    <td class="text-center">{{ contratto.minuti_residui }}</td>
+                    <td class="text-center">{{ contratto.credito_residuo }}</td>
+                    <td class="text-center">{{ contratto.telefonate }}</td>
+                    <td class="text-center">{{ contratto.sim_attiva }}</td>
+                    <td class="text-center">{{ contratto.sim_disattiva }}</td>
+                    <td class="text-center"><a href="{% url 'modifica_contratto' contratto.id %}"
+                            class="btn btn-primary">Modifica</a></td>
+                    <td class="text-center"><a href="{% url 'elimina_contratto' contratto.id %}"
+                            class="btn btn-dange">Elimina</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="text-center">Nessun contratto trovato</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

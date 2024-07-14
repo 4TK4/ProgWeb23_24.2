@@ -19,6 +19,12 @@ from django.urls import path
 from django.conf.urls import include
 from . import myController
 urlpatterns= [
-    path("", myController.esempio_view,  #fa il binding dell'URL a cui appendiamo la stringa vuota e il controller esempio_view 
-    name="index")
+    path("", myController.home,  #fa il binding dell'URL a cui appendiamo la stringa vuota e il controller home
+    name="index"),
+
+    path("contrattoTelefonico", myController.contrattoTelefonico, name="contrattoTelefonico"),
+
+    path("sim", myController.sim, name="sim"),
+
+     path("telefonata", myController.telefonata, name="telefonata")
 ]
