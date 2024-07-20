@@ -1,3 +1,7 @@
+
+#ATTENZIONE!!!
+#in realtà django chiama 'view' ciò che per noi è il controller!!!
+
 import json
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -51,13 +55,13 @@ def SessionCount(request):
 """
 
 def home(request):
-    return render(request, '../Templates/index.html')   #mando richiesta (contesto) del template che voglio chiamare
+    return render(request, '../templates/index.html')   #mando richiesta (contesto) del template che voglio chiamare
 
 def contrattoTelefonico(request):
-    return render(request, '../Templates/contrattoTelefonico.html')
+    return render(request, '../templates/contrattoTelefonico.html')
 
 def sim(request):
-    return render(request, '../Templates/sim.html')
+    return render(request, '../templates/sim.html')
 
 def telefonata(request):
-    return render(request, '../Templates/telefonata.html')
+    return render(request, '../templates/telefonata.html')

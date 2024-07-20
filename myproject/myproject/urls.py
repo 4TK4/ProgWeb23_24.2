@@ -1,8 +1,8 @@
 """
-URL configuration for mysite project.
+URL configuration for myproject project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
+    https://docs.djangoproject.com/en/4.2/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -16,15 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import include
-from . import myController
-urlpatterns= [
-    path("", myController.home,  #fa il binding dell'URL a cui appendiamo la stringa vuota e il controller home
-    name="index"),
+#from django.conf.urls import include in teoria non serve
+from myapp import views
 
-    path("contrattoTelefonico", myController.contrattoTelefonico, name="contrattoTelefonico"),
+urlpatterns = [
+    #è buona norma inserire un "/" in coda all'url
+    
+    path('admin/', admin.site.urls), #configurazione per l'url dell'amministrazione di Django
+    
+    path("", views.home, name="index"),
 
-    path("sim", myController.sim, name="sim"),
+    path("contrattoTelefonico/", views.contrattoTelefonico, name="contrattoTelefonico"),
 
-     path("telefonata", myController.telefonata, name="telefonata")
+    path("sim/", views.sim, name="sim"),
+
+    path("telefonata/", views.telefonata, name="telefonata")
 ]
