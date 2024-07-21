@@ -58,7 +58,7 @@ def SessionCount(request):
 """
 #view home
 def home(request):
-    return render(request, '../templates/index.html')   #mando richiesta (contesto) del template che voglio chiamare
+    return render(request, '../templates/index.html')  
 
 #view ContrattoTelefonico
 def contrattoTelefonico(request):
@@ -89,6 +89,9 @@ def contrattoTelefonico(request):
     print(results)
     return render(request, '../templates/contrattoTelefonico.html', context)
 
+#funzione che crea la query per cercare i contratti in base ai filtri di ricerca,
+#comprese le informazioni riguardo al numero di telefonate effettuate, la SIM attiva attualmente associata
+#e il numero di SIM disattive un tempo associate al contratto
 def get_contratto(numero, data_attivazione, tipo):
     query = """
         SELECT 
@@ -152,8 +155,109 @@ def elimina_contratto(request, numero):
 
 #view SIM
 def sim(request):
-    return render(request, '../templates/sim.html')
+    codice = request.POST.get("Codice", "") 
+    numero = request.POST.get("Numero", "")
+    tipo = request.POST.get("Tipo", "")
+    stato = request.POST.get("Stato", "")
+    
+    query, params = get_SIM(codice, numero, tipo, stato)
+    results = []
+    error = ""
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query, params)
+            columns = [col[0] for col in cursor.description]
+            results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        error = str(e)
+
+    context = {
+        'results':results
+    }
+    
+    print(results)
+    return render(request, '../templates/sim.html', context)
+
+#funzione che crea la query per cercare le SIM in base ai filtri di ricerca
+def get_SIM(codice, numero, tipo, stato):
+    params = []
+    if stato == "Qualsiasi stato":
+        query = """ SELECT * FROM simattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if numero:
+            query += " AND Numero = %s"
+            params.append(numero)
+        if tipo:
+            query += " AND Tipo = %s"
+            params.append(tipo)
+            
+        query += """UNION SELECT * FROM simdisattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if numero:
+            query += " AND Numero = %s"
+            params.append(numero)
+        if tipo:
+            query += " AND Tipo = %s"
+            params.append(tipo)
+            
+        query += """UNION SELECT * FROM simnonattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)   
+        if numero:
+            query += " AND Numero = %s"
+            params.append(numero)
+        if tipo:
+            query += " AND Tipo = %s"
+            params.append(tipo)
+    
+    elif stato and stato == "Attiva":
+        query = """ SELECT * FROM simattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if numero:
+            query += " AND Numero = %s"
+            params.append(numero)
+        if tipo:
+            query += " AND Tipo = %s"
+            params.append(tipo)
+        
+    elif stato and stato == "Disattiva":
+        query = """ SELECT * FROM simdisattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if numero:
+            query += " AND Numero = %s"
+            params.append(numero)
+        if tipo:
+            query += " AND Tipo = %s"
+            params.append(tipo)
+            
+    elif stato and stato == "Non attiva":
+        query = """ SELECT * FROM simnonattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if numero:
+            query += " AND Numero = %s"
+            params.append(numero)
+        if tipo:
+            query += " AND Tipo = %s"
+            params.append(tipo)
+
+    return query, params
 
 #view Telefonata
 def telefonata(request):
     return render(request, '../templates/telefonata.html')
+
+
+
+
