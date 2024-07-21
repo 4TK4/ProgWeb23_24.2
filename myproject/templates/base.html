@@ -1,4 +1,5 @@
 {% load static %}
+{% load menu_tags %}
 <!DOCTYPE html>
 
 <html>
@@ -51,18 +52,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto">
             <li class="nav-item col-auto">
-              <a class="nav-link" href="{% url 'index' %}">Home</a>
+              <a class="nav-link {% is_active request '/' %}" href="{% url 'index' %}">Home</a>
             </li>
             <li class="nav-item col-auto">
-              <a class="nav-link" href="{% url 'contrattoTelefonico' %}"
-                >Contratto Telefonico</a
-              >
+              <a class="nav-link {% is_active request '/contrattoTelefonico/' %}" href="{% url 'contrattoTelefonico' %}">Contratto Telefonico</a>
             </li>
             <li class="nav-item col-auto">
-              <a class="nav-link" href="{% url 'sim' %}">Sim</a>
+              <a class="nav-link {% is_active request '/sim/' %}" href="{% url 'sim' %}">Sim</a>
             </li>
             <li class="nav-item col-auto">
-              <a class="nav-link" href="{% url 'telefonata' %}">Telefonata</a>
+              <a class="nav-link {% is_active request '/telefonata/' %}" href="{% url 'telefonata' %}">Telefonata</a>
             </li>
           </ul>
         </div>
@@ -73,13 +72,13 @@
     <main class="container-fluid">{% block content %}{% endblock %}</main>
 
     <!-- Footer -->
-    <footer class="footer fixed-bottom">
+    <footer class="footer fixed-bottom py-2">
       <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-auto">
             <a
               href="mailto:a.brasi3@studenti.unibg.it"
-              class="text-decoration-none text-muted"
+              class="text-decoration-none text-dark"
               >a.brasi3@studenti.unibg.it</a
             >
           </div>
@@ -94,7 +93,7 @@
           <div class="col-auto">
             <a
               href="mailto:l.colombo34@studenti.unibg.it"
-              class="text-decoration-none text-muted"
+              class="text-decoration-none text-dark"
               >l.colombo34@studenti.unibg.it</a
             >
           </div>
@@ -109,7 +108,7 @@
           <div class="col-auto">
             <a
               href="mailto:l.poloni4@studenti.unibg.it"
-              class="text-decoration-none text-muted"
+              class="text-decoration-none text-dark"
               >l.poloni4@studenti.unibg.it</a
             >
           </div>

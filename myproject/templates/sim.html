@@ -20,7 +20,7 @@
             <div class="form-group mb-3">
                 <label for="tipologia_sim">Tipologia SIM:</label>
                 <select class="form-control" id="tipologia_sim">
-                    <option value="">Qualsiasi tipologia</option>
+                    <option value="" class="text-secondary">Qualsiasi tipologia</option>
                     <option value="standard">Standard</option>
                     <option value="micro">Micro</option>
                     <option value="elettronica">Elettronica</option>
@@ -29,13 +29,16 @@
             <div class="form-group mb-4">
                 <label for="stato_sim">Stato SIM:</label>
                 <select class="form-control" id="stato_sim">
-                    <option value="">Qualsiasi stato</option>
+                    <option value=""class="text-secondary">Qualsiasi stato</option>
                     <option value="attiva">Attiva</option>
                     <option value="disattiva">Disattiva</option>
                     <option value="non_attivata">Non attivata</option>
                 </select>
             </div>
-            <button class="btn btn-outline-success" type="submit">Cerca</button>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-outline-success" type="submit">Cerca</button>
+            </div>
+            
         </form>
     </div>
     <div class="col-md-10">

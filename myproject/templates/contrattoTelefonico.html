@@ -16,7 +16,7 @@
             <div class="form-group mb-3">
                 <label for="tipologia_contratto">Tipologia contratto:</label>
                 <select class="form-control" id="tipologia_contratto">
-                    <option value="">Qualsiasi tipologia</option>
+                    <option value="" class="text-secondary">Qualsiasi tipologia</option>
                     <option value="a_ricarica">A ricarica</option>
                     <option value="a_consumo">A consumo</option>
                 </select>
@@ -25,8 +25,12 @@
                 <label for="data_attivazione">Data di attivazione:</label>
                 <input type="date" class="form-control" id="data_attivazione">
             </div>
-            <button class="btn btn-outline-success mb-5" type="submit">Cerca</button> <br>
-            <button class="btn btn-outline-primary" type="button" onclick="">Aggiungi nuovo contratto</button>
+            <div class="d-flex flex-column align-items-center">
+                <button class="btn btn-outline-success mb-5" type="submit">Cerca</button>
+                <button class="btn btn-outline-primary" type="button" onclick="">Aggiungi nuovo contratto</button>
+            </div>
+           
+            
         </form>
     </div>
     <div class="col-md-10">
