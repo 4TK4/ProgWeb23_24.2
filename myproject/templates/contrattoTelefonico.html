@@ -47,7 +47,7 @@
                     <th class="text-center">Credito Residuo</th>
                     <th class="text-center">Telefonate</th>
                     <th class="text-center">SIM Attiva</th>
-                    <th class="text-center">SIM Disattiva</th>
+                    <th class="text-center">SIM Disattive</th>
                     <th class="text-center">Modifica</th>
                     <th class="text-center">Elimina</th>
                 </tr>
@@ -59,8 +59,8 @@
                     <td class="text-center">{{ result.Numero }}</td>
                     <td class="text-center">{{ result.DataAttivazione }}</td>
                     <td class="text-center">{{ result.Tipo }}</td>
-                    <td class="text-center">{{ result.MinutiResidui }}</td>
-                    <td class="text-center">{{ result.CreditoResiduo }}</td>
+                    <td class="text-center">{% if result.MinutiResidui is not None %} {{ result.MinutiResidui }} {% endif %}</td>
+                    <td class="text-center">{% if result.CreditoResiduo is not None %} {{ result.CreditoResiduo }} {% endif %}</td>
                     <td class="text-center">{{ result.Telefonate }}</td>
                     <td class="text-center">{{ result.SIMAttiva }}</td>
                     <td class="text-center">{{ result.SIMDisattive }}</td>
