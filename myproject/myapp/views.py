@@ -256,8 +256,60 @@ def get_SIM(codice, numero, tipo, stato):
 
 #view Telefonata
 def telefonata(request):
-    return render(request, '../templates/telefonata.html')
+    id = request.POST.get("ID", "") 
+    effettuata_da = request.POST.get("EffettuataDa", "")
+    data = request.POST.get("Data", "")
+    ora = request.POST.get("Ora", "")
+    durata = request.POST.get("Durata", "")
+    costo = request.POST.get("Costo", "")
+    
+    query, params = get_telefonata(id, effettuata_da, data, ora, durata, costo)
+    results = []
+    error = ""
 
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query, params)
+            columns = [col[0] for col in cursor.description]
+            results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        error = str(e)
+
+    context = {
+        'results':results
+    }
+    
+    print(results)
+    return render(request, '../templates/telefonata.html', context)
+
+#funzione che crea la query per cercare le SIM in base ai filtri di ricerca
+def get_telefonata(id, effettuata_da, data, ora, durata, costo):
+    params = []
+    query = """
+    SELECT * FROM telefonata WHERE 1=1
+    """
+    params = []
+    if id:
+        query += " AND ID = %s"
+        params.append(id)
+    if effettuata_da:
+        query += " AND EffettuataDa = %s"
+        params.append(effettuata_da)
+    if data:
+        query += " AND Data LIKE %s"
+        params.append(f'%{data}%')
+    if ora:
+        query += " AND Ora LIKE %s"
+        params.append(f'%{ora}%')
+    if durata:
+        query += " AND Durata = %s"
+        params.append(durata)
+    if costo is not None:
+        query += " AND Costo = %s"
+        params.append(costo)
+
+    query += " ORDER BY EffettuataDa"
+    return query, params
 
 
 
