@@ -67,7 +67,11 @@
                     <td class="text-center"><a href=""
                             class="btn btn-primary">Modifica</a></td>
                     <td class="text-center"><a href=""
-                            class="btn btn-dange">Elimina</a></td>
+                        <form method="post" action="{% url 'contratti:delete_contratto' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="Numero" value="{{ result.Numero }}">
+                            <button type="submit" class="btn btn-danger">Elimina</button>
+                        </form>
                 </tr>
                 {% empty %}
                 <tr>
