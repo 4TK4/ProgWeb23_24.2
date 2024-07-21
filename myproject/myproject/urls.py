@@ -30,5 +30,10 @@ urlpatterns = [
 
     path("sim/", views.sim, name="sim"),
 
-    path("telefonata/", views.telefonata, name="telefonata")
+    path("telefonata/", views.telefonata, name="telefonata"),
+    
+    path('modifica/', views.modifica_contratto, name='modifica_contratto'),
+    
+    path('elimina/', views.elimina_contratto, name='elimina_contratto')
+
 ]

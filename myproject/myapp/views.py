@@ -56,10 +56,11 @@ def SessionCount(request):
         request.session["counter"]=counter;
     return res
 """
-
+#view home
 def home(request):
     return render(request, '../templates/index.html')   #mando richiesta (contesto) del template che voglio chiamare
 
+#view ContrattoTelefonico
 def contrattoTelefonico(request):
     numero = request.POST.get("Numero", "") 
     data_attivazione = request.POST.get("DataAttivazione", "")
@@ -86,7 +87,6 @@ def contrattoTelefonico(request):
     }
     
     print(results)
-
     return render(request, '../templates/contrattoTelefonico.html', context)
 
 def get_contratto(numero, data_attivazione, tipo):
@@ -105,8 +105,45 @@ def get_contratto(numero, data_attivazione, tipo):
 
     return query, params
 
+def modifica_contratto(request, numero):
+    if request.method == 'GET':
+        numero = request.GET.get('Numero')
+        tipo = request.GET.get('Tipo')
+        minuti_residui = request.GET.get('MinutiResidui')
+        credito_residuo = request.GET.get('CreditoResiduo')
+
+        contratto = get_object_or_404(ContrattoTelefonico, numero=numero)
+        
+        if tipo == 'a consumo':
+            contratto.tipo = tipo
+            contratto.minuti_residui = minuti_residui
+            contratto.credito_residuo = None
+        elif tipo == 'a ricarica':
+            contratto.tipo = tipo
+            contratto.minuti_residui = None
+            contratto.credito_residuo = credito_residuo
+        
+        contratto.save()
+        return redirect('contrattoTelefonico')  
+    return render(request, 'contratti/modifica_contratto.html')
+
+def elimina_contratto(request, numero):
+    query = "DELETE FROM contrattoTelefonico WHERE Numero = %s"
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query, [numero])
+    except Exception as e:
+        error = str(e)
+        return redirect('numero', {'error': error})
+
+    return redirect('contrattoTelefonico')
+
+
+
+#view SIM
 def sim(request):
     return render(request, '../templates/sim.html')
 
+#view Telefonata
 def telefonata(request):
     return render(request, '../templates/telefonata.html')
