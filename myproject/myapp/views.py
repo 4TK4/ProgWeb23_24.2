@@ -138,7 +138,7 @@ def modifica_contratto(request, numero):
     return render(request, 'contratti/modifica_contratto.html')
 
 def elimina_contratto(request, numero):
-    query = "DELETE FROM contrattoTelefonico WHERE Numero = %s"
+    query = "DELETE FROM contrattotelefonico WHERE Numero = %s" 
     try:
         with connection.cursor() as cursor:
             cursor.execute(query, [numero])
