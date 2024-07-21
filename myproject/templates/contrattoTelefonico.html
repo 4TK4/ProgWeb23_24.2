@@ -50,19 +50,19 @@
             </thead>
             <tbody>
                 <!-- Itera sui contratti -->
-                {% for contratto in contratti %}
+                {% for result in results %}
                 <tr>
-                    <td class="text-center">{{ contratto.numero }}</td>
-                    <td class="text-center">{{ contratto.data_attivazione }}</td>
-                    <td class="text-center">{{ contratto.tipo }}</td>
-                    <td class="text-center">{{ contratto.minuti_residui }}</td>
-                    <td class="text-center">{{ contratto.credito_residuo }}</td>
-                    <td class="text-center">{{ contratto.telefonate }}</td>
-                    <td class="text-center">{{ contratto.sim_attiva }}</td>
-                    <td class="text-center">{{ contratto.sim_disattiva }}</td>
-                    <td class="text-center"><a href="{% url 'modifica_contratto' contratto.id %}"
+                    <td class="text-center">{{ result.Numero }}</td>
+                    <td class="text-center">{{ result.DataAttivazione }}</td>
+                    <td class="text-center">{{ result.Tipo }}</td>
+                    <td class="text-center">{{ result.MinutiResidui }}</td>
+                    <td class="text-center">{{ result.CreditoResiduo }}</td>
+                    <td class="text-center">{{ result.Telefonate }}</td>
+                    <td class="text-center">{{ result.SIMAttiva }}</td>
+                    <td class="text-center">{{ result.SIMDisattive }}</td>
+                    <td class="text-center"><a href=""
                             class="btn btn-primary">Modifica</a></td>
-                    <td class="text-center"><a href="{% url 'elimina_contratto' contratto.id %}"
+                    <td class="text-center"><a href=""
                             class="btn btn-dange">Elimina</a></td>
                 </tr>
                 {% empty %}
