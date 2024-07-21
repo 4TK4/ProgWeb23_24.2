@@ -90,17 +90,25 @@ def contrattoTelefonico(request):
     return render(request, '../templates/contrattoTelefonico.html', context)
 
 def get_contratto(numero, data_attivazione, tipo):
-    query = "SELECT * FROM contrattotelefonico WHERE 1=1"
+    query = """
+        SELECT 
+            c.*,
+            (SELECT COUNT(*) FROM telefonata t WHERE t.EffettuataDa = c.Numero) AS Telefonate
+        FROM 
+            contrattotelefonico c
+        WHERE 
+            1=1
+    """
     params = []
 
     if numero:
-        query += " AND Numero = %s"
+        query += " AND c.Numero = %s"
         params.append(numero)
     if data_attivazione:
-        query += " AND DataAttivazione = %s"
+        query += " AND c.DataAttivazione = %s"
         params.append(data_attivazione)
     if tipo:
-        query += " AND Tipo = %s"
+        query += " AND c.Tipo = %s"
         params.append(tipo)
 
     return query, params
