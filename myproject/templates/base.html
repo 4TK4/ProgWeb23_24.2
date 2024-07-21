@@ -16,6 +16,7 @@
   </head>
 
   <body>
+    <div class="wrapper h-100">
     <!-- Header -->
     <header class="container-fluid">
       <div class="row justify-content-center align-items-center">
@@ -29,8 +30,8 @@
           />
         </div>
         <div class="col-auto">
-          <a href="{% url 'index' %}" class="cliccabile">
-            <h1 class="display-4 mx-2">3P Phone</h1>
+          <a href="{% url 'index' %}" class="cliccabile text-decoration-none">
+            <h1 class="display-4 mx-2 text-light">3P Phone</h1>
           </a>
         </div>
       </div>
@@ -53,7 +54,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto">
             <li class="nav-item col-auto">
-              <a class="nav-link {% is_active request '/' %}" href="{% url 'index' %}">Home</a>
+              <a class="nav-link {% is_active request '/' %} " href="{% url 'index' %}">Home</a>
             </li>
             <li class="nav-item col-auto">
               <a class="nav-link {% is_active request '/contrattoTelefonico/' %}" href="{% url 'contrattoTelefonico' %}">Contratto Telefonico</a>
@@ -79,7 +80,7 @@
           <div class="col-auto">
             <a
               href="mailto:a.brasi3@studenti.unibg.it"
-              class="text-decoration-none text-dark"
+              class="text-decoration-none text-light"
               >a.brasi3@studenti.unibg.it</a
             >
           </div>
@@ -94,7 +95,7 @@
           <div class="col-auto">
             <a
               href="mailto:l.colombo34@studenti.unibg.it"
-              class="text-decoration-none text-dark"
+              class="text-decoration-none text-light"
               >l.colombo34@studenti.unibg.it</a
             >
           </div>
@@ -109,12 +110,13 @@
           <div class="col-auto">
             <a
               href="mailto:l.poloni4@studenti.unibg.it"
-              class="text-decoration-none text-dark"
+              class="text-decoration-none text-light"
               >l.poloni4@studenti.unibg.it</a
             >
           </div>
         </div>
       </div>
     </footer>
+  </div>
   </body>
 </html>

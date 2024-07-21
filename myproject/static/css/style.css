@@ -1,14 +1,26 @@
+header{
+    background-color: #800000;
+}
+
+.form-control:hover{
+    border: gray 1px solid;
+    transition: ease-in-out 0.2s;
+}
 .scrollable-table-container {
     max-height: 400px; /* Imposta l'altezza massima desiderata */
     overflow-y: auto; /* Abilita lo scorrimento verticale */
     border: 1px solid #dee2e6; /* Aggiunge un bordo al contenitore per la tabella */
-    border-radius: 0.25rem; /* Aggiunge angoli arrotondati al contenitore della tabella */
+    border-radius: 0.5rem; /* Aggiunge angoli arrotondati al contenitore della tabella */
+}
+.scrollable-table-container::-webkit-scrollbar{
+    display: none;
 }
 .table thead th {
     position: sticky;
     top: 0; /* Fissa l'intestazione in alto */
     background-color: #f8f9fa; /* Colore di sfondo dell'intestazione */
     z-index: 1; /* Assicura che l'intestazione sia sopra il corpo della tabella */
-    border-bottom: 2px solid #dee2e6; /* Bordo inferiore dell'intestazione */
-    box-shadow: 0 2px 2px -2px #dee2e6; /* Ombra per migliorare la visibilità del bordo */
+}
+footer{
+    background-color: #800000;
 }
