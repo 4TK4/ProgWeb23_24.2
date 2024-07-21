@@ -15,7 +15,7 @@ class ContrattoTelefonico(models.Model):
 #model per la tabella SIM
 class SIM(models.Model):
     codice = models.CharField(max_length=10, primary_key=True)
-    tipo = models.DateField()
+    tipo = models.CharField(max_length=20)
     associata_a = models.IntegerField(null=True, blank=True)
     era_associata_a = models.IntegerField(null=True, blank=True)
     data_attivazione = models.DateField(null=True, blank=True)

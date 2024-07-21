@@ -1,10 +1,13 @@
-
 #ATTENZIONE!!!
 #in realtà django chiama 'view' ciò che per noi è il controller!!!
 
-import json
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db import connection
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
+from .models import ContrattoTelefonico, SIM, Telefonata
+
+
 """
 esempio slides
 def paramsToJson(request):
@@ -58,7 +61,49 @@ def home(request):
     return render(request, '../templates/index.html')   #mando richiesta (contesto) del template che voglio chiamare
 
 def contrattoTelefonico(request):
-    return render(request, '../templates/contrattoTelefonico.html')
+    numero = request.POST.get("Numero", "") 
+    data_attivazione = request.POST.get("DataAttivazione", "")
+    tipo = request.POST.get("Tipo", "")
+    
+    query, params = get_contratto(numero, data_attivazione, tipo)
+    results = []
+    error = ""
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query, params)
+            columns = [col[0] for col in cursor.description]
+            results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        error = str(e)
+
+
+    #for result in results:
+       # result['DataAttivazione'] = result['DataAttivazione'].strftime('%d-%m-%y')
+
+    context = {
+        'results':results
+    }
+    
+    print(results)
+
+    return render(request, '../templates/contrattoTelefonico.html', context)
+
+def get_contratto(numero, data_attivazione, tipo):
+    query = "SELECT * FROM contrattotelefonico WHERE 1=1"
+    params = []
+
+    if numero:
+        query += " AND Numero = %s"
+        params.append(numero)
+    if data_attivazione:
+        query += " AND DataAttivazione = %s"
+        params.append(data_attivazione)
+    if tipo:
+        query += " AND Tipo = %s"
+        params.append(tipo)
+
+    return query, params
 
 def sim(request):
     return render(request, '../templates/sim.html')
