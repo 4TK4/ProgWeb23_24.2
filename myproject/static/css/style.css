@@ -1,9 +1,7 @@
 header{
     background-color: #800000;
 }
-header h1{
-    color: white;
-}
+
 .form-control:hover{
     border: gray 1px solid;
     transition: ease-in-out 0.2s;
@@ -22,4 +20,7 @@ header h1{
     top: 0; /* Fissa l'intestazione in alto */
     background-color: #f8f9fa; /* Colore di sfondo dell'intestazione */
     z-index: 1; /* Assicura che l'intestazione sia sopra il corpo della tabella */
+}
+footer{
+    background-color: #800000;
 }
