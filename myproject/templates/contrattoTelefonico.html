@@ -62,7 +62,7 @@
                     <td class="text-center">{% if result.MinutiResidui is not None %} {{ result.MinutiResidui }} {% endif %}</td>
                     <td class="text-center">{% if result.CreditoResiduo is not None %} {{ result.CreditoResiduo }} {% endif %}</td>
                     <td class="text-center">{{ result.Telefonate }}</td>
-                    <td class="text-center">{{ result.SIMAttiva }}</td>
+                    <td class="text-center">{% if result.SIMAttiva is not None %} {{ result.SIMAttiva }} {% endif %}</td>
                     <td class="text-center">{{ result.SIMDisattive }}</td>
                     <td class="text-center"><a href=""
                             class="btn btn-primary">Modifica</a></td>
