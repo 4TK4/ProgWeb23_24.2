@@ -65,7 +65,7 @@ def home(request):
 #view ContrattoTelefonico
 @csrf_exempt
 def contrattoTelefonico(request):
-    numero = request.POST.get("Numero", "")
+    numero = request.POST.get("Numero", "") if request.method == 'POST' else request.GET.get("Numero", "") 
     data_attivazione = request.POST.get("DataAttivazione", "")
     tipo = request.POST.get("Tipo", "")
     
