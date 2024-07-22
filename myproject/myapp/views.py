@@ -6,7 +6,7 @@ from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from .utils import formatta_data
-from .models import ContrattoTelefonico, SIM, Telefonata
+from .models import ContrattoTelefonico, SIMAttiva, SIMDisattiva, SIMNonAttiva, Telefonata
 
 
 """
