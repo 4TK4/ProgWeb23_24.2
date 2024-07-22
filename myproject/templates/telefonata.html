@@ -40,14 +40,14 @@
             </thead>
             <tbody>
                 <!-- Itera sulle telefonate -->
-                {% for telefonata in telefonate %}
+                {% for result in results %}
                 <tr>
-                    <td class="text-center">{{ telefonata.id }}</td>
-                    <td class="text-center">{{ telefonata.effettuataDa }}</td>
-                    <td class="text-center">{{ telefonata.data }}</td>
-                    <td class="text-center">{{ telefonata.ora }}</td>
-                    <td class="text-center">{{ telefonata.durata }}</td>
-                    <td class="text-center">{{ telefonata.costo }}</td>
+                    <td class="text-center">{{ result.ID }}</td>
+                    <td class="text-center">{{ result.EffettuataDa }}</td>
+                    <td class="text-center">{{ result.Data }}</td>
+                    <td class="text-center">{{ result.Ora }}</td>
+                    <td class="text-center">{{ result.Durata }}</td>
+                    <td class="text-center">{{ result.Costo }}</td>
                 </tr>
                 {% empty %}
                 <tr>

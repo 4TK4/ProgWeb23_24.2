@@ -304,7 +304,7 @@ def get_telefonata(id, effettuata_da, data, ora, durata, costo):
     if durata:
         query += " AND Durata = %s"
         params.append(durata)
-    if costo is not None:
+    if costo:
         query += " AND Costo = %s"
         params.append(costo)
 
