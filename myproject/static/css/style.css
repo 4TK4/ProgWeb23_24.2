@@ -1,6 +1,98 @@
 header{
     background-color: #800000;
 }
+/*eliminazione*/
+.sfondoAlert {
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+.errore {
+    margin-top: -220px;
+    animation: animatezoom 0.6s;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+@keyframes animatezoom {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.titoloAlert {
+    padding: 0;
+}
+
+.modal-dialog {
+    width: 50vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal-header h2 {
+    text-align: center;
+    background-color: #eb0404;
+    color: white;
+    border-radius: 5px;
+    font-size: 2.2vw;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 100%;
+}
+
+.contAlert {
+    padding-bottom: 0.2vw;
+}
+
+.modal-body p {
+    margin-left: 3%;
+    font-size: 1.2vw;
+}
+
+.pulsanti {
+    padding: 0;
+    border-top: none;
+}
+
+.btn {
+    font-size: 1.2vw;
+    padding: 1.5% 2%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    margin-right: 2%;
+    margin-bottom: 2%;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #fff;
+    text-shadow: -0.8px 0 black, 0 0.8px black, 0.8px 0 black, 0 -0.8px black;
+
+}
+
+.elimina {
+    background-color: #fc2424;
+    color: white;
+}
+
+.elimina:hover {
+    background-color: #d70303;
+}
+
+.annulla {
+    color: black;
+    border: 2px solid #ccc;
+}
+
+
 
 .form-control:hover{
     border: gray 1px solid;
@@ -24,3 +116,4 @@ header{
 footer{
     background-color: #800000;
 }
+

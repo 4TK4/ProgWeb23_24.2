@@ -58,11 +58,11 @@ def SessionCount(request):
 """
 #view home
 def home(request):
-    return render(request, '../templates/index.html')   #mando richiesta (contesto) del template che voglio chiamare
+    return render(request, '../templates/index.html')  
 
 #view ContrattoTelefonico
 def contrattoTelefonico(request):
-    numero = request.POST.get("Numero", "") 
+    numero = request.POST.get("Numero", "") if request.method == 'POST' else  request.GET.get("Numero","")
     data_attivazione = request.POST.get("DataAttivazione", "")
     tipo = request.POST.get("Tipo", "")
     
@@ -89,6 +89,9 @@ def contrattoTelefonico(request):
     print(results)
     return render(request, '../templates/contrattoTelefonico.html', context)
 
+#funzione che crea la query per cercare i contratti in base ai filtri di ricerca,
+#comprese le informazioni riguardo al numero di telefonate effettuate, la SIM attiva attualmente associata
+#e il numero di SIM disattive un tempo associate al contratto
 def get_contratto(numero, data_attivazione, tipo):
     query = """
         SELECT 
@@ -138,7 +141,7 @@ def modifica_contratto(request, numero):
     return render(request, 'contratti/modifica_contratto.html')
 
 def elimina_contratto(request, numero):
-    query = "DELETE FROM contrattoTelefonico WHERE Numero = %s"
+    query = "DELETE FROM contrattotelefonico WHERE Numero = %s" 
     try:
         with connection.cursor() as cursor:
             cursor.execute(query, [numero])
@@ -152,8 +155,144 @@ def elimina_contratto(request, numero):
 
 #view SIM
 def sim(request):
-    return render(request, '../templates/sim.html')
+    codice = request.POST.get("Codice", "") 
+    associata_a = request.POST.get("AssociataA", "")
+    tipo = request.POST.get("Tipo", "")
+    stato = request.POST.get("Stato", "")
+    
+    query, params = get_SIM(codice, associata_a, tipo, stato)
+    results = []
+    error = ""
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query, params)
+            columns = [col[0] for col in cursor.description]
+            results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        error = str(e)
+
+    context = {
+        'results':results
+    }
+    
+    return render(request, '../templates/sim.html', context)
+
+#funzione che crea la query per cercare le SIM in base ai filtri di ricerca
+def get_SIM(codice, associata_a, tipo, stato):
+    query =""
+    params = []
+    if not stato or stato == "":
+        query += """ SELECT * FROM simattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
+        if tipo:
+            query += " AND TipoSIM = %s"
+            params.append(tipo)
+            
+        query += """UNION SELECT * FROM simdisattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
+        if tipo:
+            query += " AND TipoSIM = %s"
+            params.append(tipo)
+            
+        query += """UNION SELECT * FROM simnonattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)   
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
+        if tipo:
+            query += " AND TipoSIM = %s"
+            params.append(tipo)
+    
+    elif stato and stato == "Attiva":
+        query = """ SELECT * FROM simattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
+        if tipo:
+            query += " AND TipoSIM = %s"
+            params.append(tipo)
+        
+    elif stato and stato == "Disattiva":
+        query = """ SELECT * FROM simdisattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
+        if tipo:
+            query += " AND TipoSIM = %s"
+            params.append(tipo)
+            
+    elif stato and stato == "Non attivata":
+        query = """ SELECT * FROM simnonattiva WHERE 1=1 """
+        if codice:
+            query += " AND Codice = %s"
+            params.append(codice)    
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
+        if tipo:
+            query += " AND TipoSIM = %s"
+            params.append(tipo)
+
+    return query, params
 
 #view Telefonata
-def telefonata(request):
-    return render(request, '../templates/telefonata.html')
+def telefonata(request): 
+    effettuata_da = request.POST.get("EffettuataDa", "") if request.method=='POST' else request.GET.get("EffettuataDa", "")
+    data = request.POST.get("Data", "")
+    
+    query, params = get_telefonata(effettuata_da, data)
+    results = []
+    error = ""
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query, params)
+            columns = [col[0] for col in cursor.description]
+            results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    except Exception as e:
+        error = str(e)
+
+    context = {
+        'results':results
+    }
+    
+    return render(request, '../templates/telefonata.html', context)
+
+#funzione che crea la query per cercare le SIM in base ai filtri di ricerca
+def get_telefonata(effettuata_da, data):
+    params = []
+    query = """
+    SELECT * FROM telefonata WHERE 1=1
+    """
+    params = []
+    if effettuata_da:
+        query += " AND EffettuataDa = %s"
+        params.append(effettuata_da)
+    if data:
+        query += " AND Data LIKE %s"
+        params.append(f'%{data}%')
+
+    query += " ORDER BY EffettuataDa"
+    return query, params
+
+
+

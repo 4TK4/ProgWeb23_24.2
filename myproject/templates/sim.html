@@ -4,34 +4,36 @@
 
 {% block content %}
 
+
 <div class="row">
     <div class="col-md-2">
         <!-- Filtro di ricerca -->
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'sim' %}">
+            {% csrf_token %} <!-- Indica che la richiesta è generata dall'applicazione e non da una fonte attaccante-->
             <div class="form-group mb-3">
                 <label for="codice">Codice:</label>
-                <input type="text" class="form-control" id="codice" pattern="[a-zA-Z0-9]{1,9}">
+                <input type="text" name="Codice" class="form-control" id="codice" pattern="[a-zA-Z0-9]{1,9}">
             </div>
             <div class="form-group mb-3">
                 <label for="numero_telefono">Numero di telefono:</label>
-                <input type="tel" class="form-control" id="numero_telefono" pattern="[0-9]{1,10}">
+                <input type="tel" name="AssociataA" class="form-control" id="numero_telefono" pattern="[0-9]{1,10}">
             </div>
             <div class="form-group mb-3">
                 <label for="tipologia_sim">Tipologia SIM:</label>
-                <select class="form-control" id="tipologia_sim">
+                <select name="Tipo" class="form-control" id="tipologia_sim">
                     <option value="" class="text-secondary">Qualsiasi tipologia</option>
-                    <option value="standard">Standard</option>
-                    <option value="micro">Micro</option>
-                    <option value="elettronica">Elettronica</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Micro">Micro</option>
+                    <option value="Elettronica">Elettronica</option>
                 </select>
             </div>
             <div class="form-group mb-4">
                 <label for="stato_sim">Stato SIM:</label>
-                <select class="form-control" id="stato_sim">
+                <select name="Stato" class="form-control" id="stato_sim">
                     <option value=""class="text-secondary">Qualsiasi stato</option>
-                    <option value="attiva">Attiva</option>
-                    <option value="disattiva">Disattiva</option>
-                    <option value="non_attivata">Non attivata</option>
+                    <option value="Attiva">Attiva</option>
+                    <option value="Disattiva">Disattiva</option>
+                    <option value="Non attivata">Non attivata</option>
                 </select>
             </div>
             <div class="d-flex justify-content-center">
@@ -57,14 +59,14 @@
             </thead>
             <tbody>
                 <!-- Itera sulle SIM -->
-                {% for sim in sims %}
+                {% for result in results %}
                 <tr>
-                    <td class="text-center">{{ sim.codice }}</td>
-                    <td class="text-center">{{ sim.tipo }}</td>
-                    <td class="text-center">{{ sim.associataA }}</td>
-                    <td class="text-center">{{ sim.eraAssociataA }}</td>
-                    <td class="text-center">{{ sim.dataAttivazione }}</td>
-                    <td class="text-center">{{ sim.dataDisattivazione }}</td>
+                    <td class="text-center">{{ result.Codice }}</td>
+                    <td class="text-center">{% if result.TipoSIM is not None %} {{ result.TipoSIM }} {% endif %}</td>
+                    <td class="text-center">{% if result.AssociataA is not None %} <a href="{% url 'contrattoTelefonico' %}?Numero={{ result.AssociataA }}">{{ result.AssociataA }} </a>{% endif %}</td>
+                    <td class="text-center">{% if result.EraAssociataA is not None %} <a href="{% url 'contrattoTelefonico' %}?Numero={{ result.EraAssociataA }}">{{ result.EraAssociataA }} </a> {% endif %}</td>
+                    <td class="text-center">{% if result.DataAttivazione is not None %} {{ result.DataAttivazione }} {% endif %}</td>
+                    <td class="text-center">{% if result.DataDisattivazione is not None %}{{ result.DataDisattivazione }} {% endif %}</td>
                 </tr>
                 {% empty %}
                 <tr>
