@@ -134,18 +134,9 @@ def aggiungi_contratto(request):
         credito_residuo = request.POST.get('CreditoResiduo', '')
         minuti_residui = request.POST.get('MinutiResidui', '')
 
-        try:
-            data_ap_dt = datetime.strptime(data_ap, '%Y-%m-%d') if data_ap else None
-            data_ch_dt = datetime.strptime(data_ch, '%Y-%m-%d') if data_ch else None
-        except ValueError:
-            error = "Formato data non valido"
-            print(error)
-            data_ap_dt = None
-            data_ch_dt = None
+        if data_attivazione:
+            data_attivazione = formatta_data(data_attivazione)
 
-        is_valid = controllo(attiva, data_ch_dt, data_ap_dt,False)
-
-        if is_valid:
             query = """
                 INSERT INTO contrattotelefonico (Numero, DataAttivazione, Tipo, CreditoResiduo, MinutiResidui)
                 VALUES (%s, %s, %s, %s, %s, %s)
