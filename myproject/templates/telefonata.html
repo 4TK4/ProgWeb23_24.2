@@ -27,14 +27,14 @@
 
         <div class="scrollable-table-container">
         <!-- Tabella delle telefonate -->
-        <table class="table table-striped table-spaced">
+        <table class="table table-striped table-spaced" id="tabellaTelefonata">
             <thead>
                 <tr>
                     <th class="text-center">ID</th>
-                    <th class="text-center">EffettuataDa ↕</th>
-                    <th class="text-center">Data ↕</th>
+                    <th class="text-center" onclick="sortTable(1, 'num', 'tabellaTelefonata')">EffettuataDa ↕</th>
+                    <th class="text-center" onclick="sortTable(2, 'date', 'tabellaTelefonata')">Data ↕</th>
                     <th class="text-center">Ora</th>
-                    <th class="text-center">Durata ↕</th>
+                    <th class="text-center" onclick="sortTable(4, 'num', 'tabellaTelefonata')">Durata ↕</th>
                     <th class="text-center">Costo</th>
                 </tr>
             </thead>
