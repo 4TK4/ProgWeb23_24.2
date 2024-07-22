@@ -1,10 +1,10 @@
 function setEliminazione(numero) {
-    document.getElementById('Err').style.display = 'block';
+    document.getElementById('Alert').style.display = 'block';
   
-    const elimButton = document.getElementById('eliminazione');
+    const elimButton = document.getElementById('confirmDelete');
   
     const handleElimination = function () {
-      document.getElementById('Err').style.display = 'none';
+      document.getElementById('Alert').style.display = 'none';
       window.location.replace("\elimina_contratto\\" + numero + "\\");
     };
   
