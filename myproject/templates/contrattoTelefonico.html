@@ -33,29 +33,30 @@
 <div class="row">
     <div class="col-md-2">
         <!-- Filtro di ricerca -->
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'contrattoTelefonico' %}">
+            {% csrf_token %} <!-- Indica che la richiesta è generata dall'applicazione e non da una fonte attaccante-->
             <div class="form-group mb-3">
                 <label for="numero_telefono">Numero di telefono:</label>
-                <input type="tel" class="form-control" id="numero_telefono" pattern="[0-9]*{1,10}">
+                <input type="tel" name="Numero"class="form-control" id="numero_telefono" pattern="[0-9]*{1,10}">
             </div>
             <div class="form-group mb-3">
                 <label for="tipologia_contratto">Tipologia contratto:</label>
-                <select class="form-control" id="tipologia_contratto">
+                <select name="Tipo" class="form-control" id="tipologia_contratto">
                     <option value="" class="text-secondary">Qualsiasi tipologia</option>
-                    <option value="a_ricarica">A ricarica</option>
-                    <option value="a_consumo">A consumo</option>
+                    <option value="a ricarica">A ricarica</option>
+                    <option value="a consumo">A consumo</option>
                 </select>
             </div>
             <div class="form-group mb-4">
                 <label for="data_attivazione">Data di attivazione:</label>
-                <input type="date" class="form-control" id="data_attivazione">
+                <input type="date" name="DataAttivazione" class="form-control" id="data_attivazione">
             </div>
             <div class="d-flex flex-column align-items-center">
                 <button class="btn btn-outline-success mb-4 search-button" type="submit">Cerca</button>
                 <button class="btn btn-outline-primary add-button" type="button" onclick="">Aggiungi nuovo contratto</button>
             </div>
-           
-            
+
+
         </form>
     </div>
     <div class="col-md-10">
@@ -65,8 +66,8 @@
         <table class="table table-striped table-spaced">
             <thead>
                 <tr>
-                    <th class="text-center">Numero</th>
-                    <th class="text-center">Data Attivazione</th>
+                    <th class="text-center">Numero ↕</th>
+                    <th class="text-center">Data Attivazione ↕</th>
                     <th class="text-center">Tipo</th>
                     <th class="text-center">Minuti Residui</th>
                     <th class="text-center">Credito Residuo</th>
@@ -84,11 +85,11 @@
                     <td class="text-center">{{ result.Numero }}</td>
                     <td class="text-center">{% if result.DataAttivazione is not None %} {{ result.DataAttivazione }} {% endif %} </td>
                     <td class="text-center">{% if result.Tipo is not None %} {{ result.Tipo }} {% endif %}</td>
-                    <td class="text-center">{% if result.MinutiResidui is not None %} {{ result.MinutiResidui }} {% endif %}</td>
-                    <td class="text-center">{% if result.CreditoResiduo is not None %} {{ result.CreditoResiduo }} {% endif %}</td>
+                    <td class="text-center">{% if result.Tipo == "a consumo" and result.MinutiResidui is not None %} {{ result.MinutiResidui }} {% endif %}</td>
+                    <td class="text-center">{% if result.Tipo == "a ricarica" and result.CreditoResiduo is not None %} {{ result.CreditoResiduo }} {% endif %}</td>
                     <td class="text-center">{% if result.Telefonate is not 0 %} <a href="{% url 'telefonata' %}?EffettuataDa={{ result.Numero }}">{{ result.Telefonate }}</a>{% else%} {{ result.Telefonate }} {% endif %}</td>
-                    <td class="text-center">{% if result.SIMAttiva is not None %} {{ result.SIMAttiva }} {% endif %}</td>
-                    <td class="text-center">{% if result.SIMDisattive is not None %} {{ result.SIMDisattive }} {% endif %}</td>
+                    <td class="text-center">{% if result.SIMAttiva is not None %} <a href="{% url 'sim' %}?AssociataA={{ result.Numero }}">{{ result.SIMAttiva }}</a>{% endif %}</td>
+                    <td class="text-center">{% if result.SIMDisattive is not 0 %} <a href="{% url 'sim' %}?EraAssociataA={{ result.Numero }}">{{ result.SIMDisattive }} </a> {% else%} {{ result.SIMDisattive }}{% endif %}</td>
                     <td class="text-center"><a href=""> <img src="{% static 'images/pencil.png' %}" height=20px width=20px alt="Modifica" class="icona"/></a></td>
                     <td class='text-center'><a onclick="setEliminazione('{{result.Numero}}')">
                     <img src="{% static 'images/bin.png' %}" height=20px width=20px alt="Elimina" class="icona"/></a></td>
