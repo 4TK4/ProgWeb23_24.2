@@ -58,14 +58,14 @@
             </thead>
             <tbody>
                 <!-- Itera sulle SIM -->
-                {% for sim in sims %}
+                {% for result in results %}
                 <tr>
-                    <td class="text-center">{{ sim.codice }}</td>
-                    <td class="text-center">{{ sim.tipo }}</td>
-                    <td class="text-center">{{ sim.associataA }}</td>
-                    <td class="text-center">{{ sim.eraAssociataA }}</td>
-                    <td class="text-center">{{ sim.dataAttivazione }}</td>
-                    <td class="text-center">{{ sim.dataDisattivazione }}</td>
+                    <td class="text-center">{{ result.Codice }}</td>
+                    <td class="text-center">{% if result.TipoSIM is not None %} {{ result.TipoSIM }} {% endif %}</td>
+                    <td class="text-center">{% if result.AssociataA is not None %} {{ result.AssociataA }} {% endif %}</td>
+                    <td class="text-center">{% if result.EraAssociataA is not None %} {{ result.EraAssociataA }} {% endif %}</td>
+                    <td class="text-center">{% if result.DataAttivazione is not None %} {{ result.DataAttivazione }} {% endif %}</td>
+                    <td class="text-center">{% if result.DataDisattivazione is not None %}{{ result.DataDisattivazione }} {% endif %}</td>
                 </tr>
                 {% empty %}
                 <tr>

@@ -58,13 +58,13 @@
                 {% for result in results %}
                 <tr>
                     <td class="text-center">{{ result.Numero }}</td>
-                    <td class="text-center">{{ result.DataAttivazione }}</td>
-                    <td class="text-center">{{ result.Tipo }}</td>
+                    <td class="text-center">{% if result.DataAttivazione is not None %} {{ result.DataAttivazione }} {% endif %} </td>
+                    <td class="text-center">{% if result.Tipo is not None %} {{ result.Tipo }} {% endif %}</td>
                     <td class="text-center">{% if result.MinutiResidui is not None %} {{ result.MinutiResidui }} {% endif %}</td>
                     <td class="text-center">{% if result.CreditoResiduo is not None %} {{ result.CreditoResiduo }} {% endif %}</td>
-                    <td class="text-center">{{ result.Telefonate }}</td>
+                    <td class="text-center">{% if result.Telefonate is not None %} {{ result.Telefonate }} {% endif %}</td>
                     <td class="text-center">{% if result.SIMAttiva is not None %} {{ result.SIMAttiva }} {% endif %}</td>
-                    <td class="text-center">{{ result.SIMDisattive }}</td>
+                    <td class="text-center">{% if result.SIMDisattive is not None %} {{ result.SIMDisattive }} {% endif %}</td>
                     <td class="text-center"><a href=""
                             class="btn btn-primary">Modifica</a></td>
                     <td class='text-center'><a id="eliminazione" onclick="setEliminazione('{{result.Numero}}')">

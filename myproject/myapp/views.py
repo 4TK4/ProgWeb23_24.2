@@ -181,9 +181,10 @@ def sim(request):
 
 #funzione che crea la query per cercare le SIM in base ai filtri di ricerca
 def get_SIM(codice, numero, tipo, stato):
+    query =""
     params = []
-    if stato == "Qualsiasi stato":
-        query = """ SELECT * FROM simattiva WHERE 1=1 """
+    if not stato or stato == "Qualsiasi stato":
+        query += """ SELECT * FROM simattiva WHERE 1=1 """
         if codice:
             query += " AND Codice = %s"
             params.append(codice)    
