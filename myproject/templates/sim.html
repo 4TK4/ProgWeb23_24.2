@@ -63,8 +63,8 @@
                 <tr>
                     <td class="text-center">{{ result.Codice }}</td>
                     <td class="text-center">{% if result.TipoSIM is not None %} {{ result.TipoSIM }} {% endif %}</td>
-                    <td class="text-center">{% if result.AssociataA is not None %} {{ result.AssociataA }} {% endif %}</td>
-                    <td class="text-center">{% if result.EraAssociataA is not None %} {{ result.EraAssociataA }} {% endif %}</td>
+                    <td class="text-center">{% if result.AssociataA is not None %} <a href="{% url 'contrattoTelefonico' %}?Numero={{ result.AssociataA }}">{{ result.AssociataA }} </a>{% endif %}</td>
+                    <td class="text-center">{% if result.EraAssociataA is not None %} <a href="{% url 'contrattoTelefonico' %}?Numero={{ result.EraAssociataA }}">{{ result.EraAssociataA }} </a> {% endif %}</td>
                     <td class="text-center">{% if result.DataAttivazione is not None %} {{ result.DataAttivazione }} {% endif %}</td>
                     <td class="text-center">{% if result.DataDisattivazione is not None %}{{ result.DataDisattivazione }} {% endif %}</td>
                 </tr>

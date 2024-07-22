@@ -62,7 +62,7 @@ def home(request):
 
 #view ContrattoTelefonico
 def contrattoTelefonico(request):
-    numero = request.POST.get("Numero", "") 
+    numero = request.POST.get("Numero", "") if request.method == 'POST' else  request.GET.get("Numero","")
     data_attivazione = request.POST.get("DataAttivazione", "")
     tipo = request.POST.get("Tipo", "")
     
@@ -256,7 +256,7 @@ def get_SIM(codice, associata_a, tipo, stato):
 
 #view Telefonata
 def telefonata(request): 
-    effettuata_da = request.POST.get("EffettuataDa", "")
+    effettuata_da = request.POST.get("EffettuataDa", "") if request.method=='POST' else request.GET.get("EffettuataDa", "")
     data = request.POST.get("Data", "")
     
     query, params = get_telefonata(effettuata_da, data)
