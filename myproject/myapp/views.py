@@ -57,12 +57,14 @@ def SessionCount(request):
     return res
 """
 #view home
+@csrf_exempt
 def home(request):
     return render(request, '../templates/index.html')  
 
 #view ContrattoTelefonico
+@csrf_exempt
 def contrattoTelefonico(request):
-    numero = request.POST.get("Numero", "") if request.method == 'POST' else  request.GET.get("Numero","")
+    numero = request.POST.get("Numero", "") 
     data_attivazione = request.POST.get("DataAttivazione", "")
     tipo = request.POST.get("Tipo", "")
     
@@ -92,6 +94,7 @@ def contrattoTelefonico(request):
 #funzione che crea la query per cercare i contratti in base ai filtri di ricerca,
 #comprese le informazioni riguardo al numero di telefonate effettuate, la SIM attiva attualmente associata
 #e il numero di SIM disattive un tempo associate al contratto
+@csrf_exempt
 def get_contratto(numero, data_attivazione, tipo):
     query = """
         SELECT 
@@ -118,6 +121,79 @@ def get_contratto(numero, data_attivazione, tipo):
 
     return query, params
 
+@csrf_exempt
+def aggiungi_contratto(request):
+    error = None
+    results = []
+
+    if request.method == 'POST':
+        numero = request.POST.get('Numero', '')
+        data_attivazione = request.POST.get('DataAttivazione', '')
+        tipo = request.POST.get('Tipo', '')
+        credito_residuo = request.POST.get('CreditoResiduo', '')
+        minuti_residui = request.POST.get('MinutiResidui', '')
+
+        try:
+            data_ap_dt = datetime.strptime(data_ap, '%Y-%m-%d') if data_ap else None
+            data_ch_dt = datetime.strptime(data_ch, '%Y-%m-%d') if data_ch else None
+        except ValueError:
+            error = "Formato data non valido"
+            print(error)
+            data_ap_dt = None
+            data_ch_dt = None
+
+        is_valid = controllo(attiva, data_ch_dt, data_ap_dt,False)
+
+        if is_valid:
+            query = """
+                INSERT INTO contrattotelefonico (Numero, DataAttivazione, Tipo, CreditoResiduo, MinutiResidui) 
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            params = (numero, data_attivazione, tipo, credito_residuo, minuti_residui)
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(query, params)
+            except Exception as e:
+                error = str(e)
+                print("Errore! "+error)
+            
+            print("Contratto telefonico inserito correttamente, con questi valori",params)
+            return redirect('contrattoTelefonico')
+        else:
+            error = "Errore nei dati inseriti"
+            print(error)
+    context = {
+        'results': results,
+        'error': error
+    }
+    return render(request, 'modifica_contratto.html', context)
+
+
+
+
+@csrf_exempt
+def modifica_contratto(request, numero):
+    error = None
+    context = {}
+    results={}
+    if request.method == 'POST':
+        tipo = request.POST.get('Tipo')
+        minuti_residui = request.POST.get('MinutiResidui')
+        credito_residuo = request.POST.get('CreditoResiduo')
+        query = """
+                UPDATE contrattotelefonico SET Tipo = %s, MinutiResidui = %s, CreditoRedisuo = %s 
+                WHERE Numero = %s
+            """
+        params = (numero, tipo, minuti_residui, credito_residuo)
+        try:
+                with connection.cursor() as cursor:
+                    cursor.execute(query, params)
+        except Exception as e:
+                error = str(e)
+
+        return redirect('contrattoTelefonico')
+    return render(request, 'modifica_contratto.html', context)
+
 def modifica_contratto(request, numero):
     if request.method == 'GET':
         numero = request.GET.get('Numero')
@@ -140,6 +216,7 @@ def modifica_contratto(request, numero):
         return redirect('contrattoTelefonico')  
     return render(request, 'contratti/modifica_contratto.html')
 
+@csrf_exempt
 def elimina_contratto(request, numero):
     query = "DELETE FROM contrattotelefonico WHERE Numero = %s" 
     try:
@@ -154,6 +231,7 @@ def elimina_contratto(request, numero):
 
 
 #view SIM
+@csrf_exempt
 def sim(request):
     codice = request.POST.get("Codice", "") 
     associata_a = request.POST.get("AssociataA", "")
@@ -179,6 +257,7 @@ def sim(request):
     return render(request, '../templates/sim.html', context)
 
 #funzione che crea la query per cercare le SIM in base ai filtri di ricerca
+@csrf_exempt
 def get_SIM(codice, associata_a, tipo, stato):
     query =""
     params = []
@@ -255,8 +334,9 @@ def get_SIM(codice, associata_a, tipo, stato):
     return query, params
 
 #view Telefonata
+@csrf_exempt
 def telefonata(request): 
-    effettuata_da = request.POST.get("EffettuataDa", "") if request.method=='POST' else request.GET.get("EffettuataDa", "")
+    effettuata_da = request.POST.get("EffettuataDa", "")
     data = request.POST.get("Data", "")
     
     query, params = get_telefonata(effettuata_da, data)
@@ -278,6 +358,7 @@ def telefonata(request):
     return render(request, '../templates/telefonata.html', context)
 
 #funzione che crea la query per cercare le SIM in base ai filtri di ricerca
+@csrf_exempt
 def get_telefonata(effettuata_da, data):
     params = []
     query = """
