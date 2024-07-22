@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
+from .utils import formatta_data
 from .models import ContrattoTelefonico, SIM, Telefonata
 
 
@@ -67,7 +68,11 @@ def contrattoTelefonico(request):
     numero = request.POST.get("Numero", "")
     data_attivazione = request.POST.get("DataAttivazione", "")
     tipo = request.POST.get("Tipo", "")
-
+    
+    # Convertire data_attivazione nel formato dd/mm/yy
+    if data_attivazione:
+        data_attivazione = formatta_data(data_attivazione)
+    
     query, params = get_contratto(numero, data_attivazione, tipo)
     results = []
     error = ""
@@ -79,10 +84,6 @@ def contrattoTelefonico(request):
             results = [dict(zip(columns, row)) for row in cursor.fetchall()]
     except Exception as e:
         error = str(e)
-
-
-    #for result in results:
-       #result['DataAttivazione'] = result['DataAttivazione'].strftime('%d-%m-%y')
 
     context = {
         'results':results
@@ -356,7 +357,11 @@ def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
 def telefonata(request):
     effettuata_da = request.POST.get("EffettuataDa", "")
     data = request.POST.get("Data", "")
-
+    
+     # Convertire data nel formato dd/mm/yy
+    if data:
+        data = formatta_data(data)
+    
     query, params = get_telefonata(effettuata_da, data)
     results = []
     error = ""
@@ -387,8 +392,7 @@ def get_telefonata(effettuata_da, data):
         query += " AND EffettuataDa = %s"
         params.append(effettuata_da)
     if data:
-        query += " AND Data LIKE %s"
-        params.append(f'%{data}%')
-
+        query += " AND Data = %s"
+        params.append(data)
     query += " ORDER BY EffettuataDa"
     return query, params
