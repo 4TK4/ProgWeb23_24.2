@@ -156,11 +156,11 @@ def elimina_contratto(request, numero):
 #view SIM
 def sim(request):
     codice = request.POST.get("Codice", "") 
-    numero = request.POST.get("Numero", "")
+    associata_a = request.POST.get("AssociataA", "")
     tipo = request.POST.get("Tipo", "")
     stato = request.POST.get("Stato", "")
     
-    query, params = get_SIM(codice, numero, tipo, stato)
+    query, params = get_SIM(codice, associata_a, tipo, stato)
     results = []
     error = ""
 
@@ -176,45 +176,44 @@ def sim(request):
         'results':results
     }
     
-    print(results)
     return render(request, '../templates/sim.html', context)
 
 #funzione che crea la query per cercare le SIM in base ai filtri di ricerca
-def get_SIM(codice, numero, tipo, stato):
+def get_SIM(codice, associata_a, tipo, stato):
     query =""
     params = []
-    if not stato or stato == "Qualsiasi stato":
+    if not stato or stato == "":
         query += """ SELECT * FROM simattiva WHERE 1=1 """
         if codice:
             query += " AND Codice = %s"
             params.append(codice)    
-        if numero:
-            query += " AND Numero = %s"
-            params.append(numero)
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
         if tipo:
-            query += " AND Tipo = %s"
+            query += " AND TipoSIM = %s"
             params.append(tipo)
             
         query += """UNION SELECT * FROM simdisattiva WHERE 1=1 """
         if codice:
             query += " AND Codice = %s"
             params.append(codice)    
-        if numero:
-            query += " AND Numero = %s"
-            params.append(numero)
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
         if tipo:
-            query += " AND Tipo = %s"
+            query += " AND TipoSIM = %s"
             params.append(tipo)
             
         query += """UNION SELECT * FROM simnonattiva WHERE 1=1 """
         if codice:
             query += " AND Codice = %s"
             params.append(codice)   
-        if numero:
-            query += " AND Numero = %s"
-            params.append(numero)
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
         if tipo:
-            query += " AND Tipo = %s"
+            query += " AND TipoSIM = %s"
             params.append(tipo)
     
     elif stato and stato == "Attiva":
@@ -222,11 +221,11 @@ def get_SIM(codice, numero, tipo, stato):
         if codice:
             query += " AND Codice = %s"
             params.append(codice)    
-        if numero:
-            query += " AND Numero = %s"
-            params.append(numero)
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
         if tipo:
-            query += " AND Tipo = %s"
+            query += " AND TipoSIM = %s"
             params.append(tipo)
         
     elif stato and stato == "Disattiva":
@@ -234,37 +233,33 @@ def get_SIM(codice, numero, tipo, stato):
         if codice:
             query += " AND Codice = %s"
             params.append(codice)    
-        if numero:
-            query += " AND Numero = %s"
-            params.append(numero)
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
         if tipo:
-            query += " AND Tipo = %s"
+            query += " AND TipoSIM = %s"
             params.append(tipo)
             
-    elif stato and stato == "Non attiva":
+    elif stato and stato == "Non attivata":
         query = """ SELECT * FROM simnonattiva WHERE 1=1 """
         if codice:
             query += " AND Codice = %s"
             params.append(codice)    
-        if numero:
-            query += " AND Numero = %s"
-            params.append(numero)
+        if associata_a:
+            query += " AND AssociataA = %s"
+            params.append(associata_a)
         if tipo:
-            query += " AND Tipo = %s"
+            query += " AND TipoSIM = %s"
             params.append(tipo)
 
     return query, params
 
 #view Telefonata
-def telefonata(request):
-    id = request.POST.get("ID", "") 
+def telefonata(request): 
     effettuata_da = request.POST.get("EffettuataDa", "")
     data = request.POST.get("Data", "")
-    ora = request.POST.get("Ora", "")
-    durata = request.POST.get("Durata", "")
-    costo = request.POST.get("Costo", "")
     
-    query, params = get_telefonata(id, effettuata_da, data, ora, durata, costo)
+    query, params = get_telefonata(effettuata_da, data)
     results = []
     error = ""
 
@@ -280,34 +275,21 @@ def telefonata(request):
         'results':results
     }
     
-    print(results)
     return render(request, '../templates/telefonata.html', context)
 
 #funzione che crea la query per cercare le SIM in base ai filtri di ricerca
-def get_telefonata(id, effettuata_da, data, ora, durata, costo):
+def get_telefonata(effettuata_da, data):
     params = []
     query = """
     SELECT * FROM telefonata WHERE 1=1
     """
     params = []
-    if id:
-        query += " AND ID = %s"
-        params.append(id)
     if effettuata_da:
         query += " AND EffettuataDa = %s"
         params.append(effettuata_da)
     if data:
         query += " AND Data LIKE %s"
         params.append(f'%{data}%')
-    if ora:
-        query += " AND Ora LIKE %s"
-        params.append(f'%{ora}%')
-    if durata:
-        query += " AND Durata = %s"
-        params.append(durata)
-    if costo:
-        query += " AND Costo = %s"
-        params.append(costo)
 
     query += " ORDER BY EffettuataDa"
     return query, params
