@@ -85,7 +85,7 @@
                     <td class="text-center">{% if result.Tipo is not None %} {{ result.Tipo }} {% endif %}</td>
                     <td class="text-center">{% if result.MinutiResidui is not None %} {{ result.MinutiResidui }} {% endif %}</td>
                     <td class="text-center">{% if result.CreditoResiduo is not None %} {{ result.CreditoResiduo }} {% endif %}</td>
-                    <td class="text-center">{% if result.Telefonate is not None %} {{ result.Telefonate }} {% endif %}</td>
+                    <td class="text-center">{% if result.Telefonate is not 0 %} <a href="{% url 'telefonata' %}?EffettuataDa={{ result.Numero }}">{{ result.Telefonate }}</a>{% else%} {{ result.Telefonate }} {% endif %}</td>
                     <td class="text-center">{% if result.SIMAttiva is not None %} {{ result.SIMAttiva }} {% endif %}</td>
                     <td class="text-center">{% if result.SIMDisattive is not None %} {{ result.SIMDisattive }} {% endif %}</td>
                     <td class="text-center"><a href=""
