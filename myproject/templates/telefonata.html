@@ -43,7 +43,7 @@
                 {% for result in results %}
                 <tr>
                     <td class="text-center">{{ result.ID }}</td>
-                    <td class="text-center">{% if result.EffettuataDa is not None%} {{ result.EffettuataDa }} {% endif %}</td>
+                    <td class="text-center">{% if result.EffettuataDa is not None%}<a href="{% url 'contrattoTelefonico' %}?Numero={{ result.EffettuataDa }}">{{ result.EffettuataDa }}</a>{% endif %}</td>
                     <td class="text-center">{% if result.Data is not None%} {{ result.Data }} {% endif %}</td>
                     <td class="text-center">{% if result.Ora is not None%} {{ result.Ora }} {% endif %}</td>
                     <td class="text-center">{% if result.Durata is not None%} {{ result.Durata }} {% endif %}</td>
