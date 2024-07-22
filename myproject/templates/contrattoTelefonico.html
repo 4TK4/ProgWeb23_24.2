@@ -1,10 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}Contratto Telefonico{% endblock %}
 {% block content %}
-<script type="text/javascript" src="./js/script.js"></script>
-<h1 class="display-4">Contratto Telefonico</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Contratto Telefonico{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static '../static/js/script.js' %}"></script>
+</head>
+<body>
+<div id="Alert" class="modal sfondoAlert" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content errore">
+            <div class="modal-header titoloAlert">
+                <h2 class="modal-title">ATTENZIONE!</h2>
+            </div>
+            <div class="modal-body contAlert">
+                <p>Sei sicuro di voler definitivamente elimare questo contratto?</p>
+            </div>
+            <div class="modal-footer pulsanti">
+                <button type="button" id="confirmDelete" class="btn elimina">Elimina</button>
+                <button type="button" class="btn btn-secondary annulla" data-dismiss="modal"
+                    onclick="document.getElementById('Alert').style.display='none'">Annulla</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-2">
@@ -67,7 +90,7 @@
                     <td class="text-center">{% if result.SIMDisattive is not None %} {{ result.SIMDisattive }} {% endif %}</td>
                     <td class="text-center"><a href=""
                             class="btn btn-primary">Modifica</a></td>
-                    <td class='text-center'><a id="eliminazione" onclick="setEliminazione('{{result.Numero}}')">
+                    <td class='text-center'><a onclick="setEliminazione('{{result.Numero}}')">
                             <img src="{% static 'images/bin.png' %}" height=20px width=20px
                             alt="Elimina" class="icona"/></a></td>
                 </tr>
@@ -80,4 +103,5 @@
         </table>
     </div>
 </div>
+</body>
 {% endblock %}
