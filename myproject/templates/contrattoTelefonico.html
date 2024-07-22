@@ -88,8 +88,8 @@
                     <td class="text-center">{% if result.Tipo == "a consumo" and result.MinutiResidui is not None %} {{ result.MinutiResidui }} {% endif %}</td>
                     <td class="text-center">{% if result.Tipo == "a ricarica" and result.CreditoResiduo is not None %} {{ result.CreditoResiduo }} {% endif %}</td>
                     <td class="text-center">{% if result.Telefonate is not 0 %} <a href="{% url 'telefonata' %}?EffettuataDa={{ result.Numero }}">{{ result.Telefonate }}</a>{% else%} {{ result.Telefonate }} {% endif %}</td>
-                    <td class="text-center">{% if result.SIMAttiva is not None %} <a href="{% url 'sim' %}?AssociataA={{ result.Numero }}">{{ result.SIMAttiva }}</a>{% endif %}</td>
-                    <td class="text-center">{% if result.SIMDisattive is not 0 %} <a href="{% url 'sim' %}?EraAssociataA={{ result.Numero }}">{{ result.SIMDisattive }} </a> {% else%} {{ result.SIMDisattive }}{% endif %}</td>
+                    <td class="text-center">{% if result.SIMAttiva is not None %} <a href="{% url 'sim' %}?Stato=Attiva&Numero={{ result.Numero }}">{{ result.SIMAttiva }}</a>{% endif %}</td>
+                    <td class="text-center">{% if result.SIMDisattive is not 0 %} <a href="{% url 'sim' %}?Stato=Disattiva&Numero={{ result.Numero }}">{{ result.SIMDisattive }} </a> {% else%} {{ result.SIMDisattive }}{% endif %}</td>
                     <td class="text-center"><a href=""> <img src="{% static 'images/pencil.png' %}" height=20px width=20px alt="Modifica" class="icona"/></a></td>
                     <td class='text-center'><a onclick="setEliminazione('{{result.Numero}}')">
                     <img src="{% static 'images/bin.png' %}" height=20px width=20px alt="Elimina" class="icona"/></a></td>

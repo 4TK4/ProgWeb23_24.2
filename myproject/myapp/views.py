@@ -226,12 +226,11 @@ def elimina_contratto(request, numero):
 @csrf_exempt
 def sim(request):
     codice = request.POST.get("Codice", "")
-    associata_a = request.POST.get("AssociataA", "") if request.method == 'POST' else request.GET.get("AssociataA", "")
-    era_associata_a = request.GET.get("EraAssociataA","")
+    numero = request.POST.get("Numero", "") if request.method == 'POST' else request.GET.get("Numero", "")
     tipo = request.POST.get("Tipo", "")
-    stato = request.POST.get("Stato", "")
+    stato = request.POST.get("Stato", "") if request.method == 'POST' else request.GET.get("Stato", "")
 
-    query, params = get_SIM(codice, associata_a, era_associata_a, tipo, stato)
+    query, params = get_SIM(codice, numero, tipo, stato)
     results = []
     error = ""
 
@@ -250,7 +249,7 @@ def sim(request):
     return render(request, '../templates/sim.html', context)
 
 #funzione che crea la query per cercare le SIM in base ai filtri di ricerca
-def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
+def get_SIM(codice, numero, tipo, stato):
     query =""
     params = []
     if not stato or stato == "":
@@ -258,12 +257,10 @@ def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
         if codice:
             query += " AND Codice = %s"
             params.append(codice)
-        if associata_a:
-            query += " AND AssociataA = %s"
-            params.append(associata_a)
-        if era_associata_a:
-            query += " AND EraAssociataA = %s"
-            params.append(era_associata_a)
+        if numero:
+            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
+            params.append(numero)
+            params.append(numero)
         if tipo:
             query += " AND TipoSIM = %s"
             params.append(tipo)
@@ -272,12 +269,10 @@ def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
         if codice:
             query += " AND Codice = %s"
             params.append(codice)
-        if associata_a:
-            query += " AND AssociataA = %s"
-            params.append(associata_a)
-        if era_associata_a:
-            query += " AND EraAssociataA = %s"
-            params.append(era_associata_a)
+        if numero:
+            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
+            params.append(numero)
+            params.append(numero)
         if tipo:
             query += " AND TipoSIM = %s"
             params.append(tipo)
@@ -286,12 +281,10 @@ def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
         if codice:
             query += " AND Codice = %s"
             params.append(codice)
-        if associata_a:
-            query += " AND AssociataA = %s"
-            params.append(associata_a)
-        if era_associata_a:
-            query += " AND EraAssociataA = %s"
-            params.append(era_associata_a)
+        if numero:
+            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
+            params.append(numero)
+            params.append(numero)
         if tipo:
             query += " AND TipoSIM = %s"
             params.append(tipo)
@@ -301,12 +294,10 @@ def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
         if codice:
             query += " AND Codice = %s"
             params.append(codice)
-        if associata_a:
-            query += " AND AssociataA = %s"
-            params.append(associata_a)
-        if era_associata_a:
-            query += " AND EraAssociataA = %s"
-            params.append(era_associata_a)
+        if numero:
+            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
+            params.append(numero)
+            params.append(numero)
         if tipo:
             query += " AND TipoSIM = %s"
             params.append(tipo)
@@ -316,12 +307,10 @@ def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
         if codice:
             query += " AND Codice = %s"
             params.append(codice)
-        if associata_a:
-            query += " AND AssociataA = %s"
-            params.append(associata_a)
-        if era_associata_a:
-            query += " AND EraAssociataA = %s"
-            params.append(era_associata_a)
+        if numero:
+            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
+            params.append(numero)
+            params.append(numero)
         if tipo:
             query += " AND TipoSIM = %s"
             params.append(tipo)
@@ -331,12 +320,10 @@ def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
         if codice:
             query += " AND Codice = %s"
             params.append(codice)
-        if associata_a:
-            query += " AND AssociataA = %s"
-            params.append(associata_a)
-        if era_associata_a:
-            query += " AND EraAssociataA = %s"
-            params.append(era_associata_a)
+        if numero:
+            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
+            params.append(numero)
+            params.append(numero)
         if tipo:
             query += " AND TipoSIM = %s"
             params.append(tipo)
@@ -346,10 +333,10 @@ def get_SIM(codice, associata_a, era_associata_a, tipo, stato):
 #view Telefonata
 @csrf_exempt
 def telefonata(request):
-    effettuata_da = request.POST.get("EffettuataDa", "")
+    effettuata_da = request.POST.get("EffettuataDa", "") if request.method == 'POST' else request.GET.get("EffettuataDa", "")
     data = request.POST.get("Data", "")
     
-     # Convertire data nel formato dd/mm/yy
+    # Convertire data nel formato dd/mm/yy
     if data:
         data = formatta_data(data)
     
