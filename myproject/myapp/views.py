@@ -104,7 +104,6 @@ def inserimento_successo(request):
 def modifica_contratto(request):
     if request.method == "POST":
         numero = request.POST.get('Numero')
-        data_attivazione = request.POST.get('DataAttivazione')
         tipo = request.POST.get('Tipo')
         minuti_residui = request.POST.get('MinutiResidui')
         credito_residuo = request.POST.get('CreditoResiduo')

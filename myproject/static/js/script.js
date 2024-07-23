@@ -139,6 +139,9 @@ function controlloInserimento() {
 }
 
 
+
+
+
 function sortTable(n, type, tableID) {
   const table = document.getElementById(tableID);
   const rows = Array.from(table.rows).slice(1); // Ottieni tutte le righe tranne l'intestazione
