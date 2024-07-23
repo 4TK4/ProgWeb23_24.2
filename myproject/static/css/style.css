@@ -217,3 +217,14 @@ footer{
     background-color: var(--primary-color);
 }
 
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: red; /* Cambia il colore di sfondo delle righe dispari */
+}
+
+.rowEven {
+    background-color: var(--background-color);
+  }
+  
+.rowOdd {
+    background-color: var(--white-color);
+  }

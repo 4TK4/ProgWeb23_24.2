@@ -139,3 +139,99 @@ function controlloInserimento() {
     document.getElementById("createForm").submit();
   }
 }
+
+
+function sortTable(n, type, tableID) {
+  const table = document.getElementById(tableID);
+  const rows = Array.from(table.rows).slice(1); // Ottieni tutte le righe tranne l'intestazione
+  const dir = table.getAttribute("data-sort-dir") === "asc" ? "desc" : "asc";
+  table.setAttribute("data-sort-dir", dir); // Aggiorna la direzione di ordinamento
+
+  rows.sort((rowA, rowB) => {
+    let x = rowA.getElementsByTagName("TD")[n].innerText;
+    let y = rowB.getElementsByTagName("TD")[n].innerText;
+
+    // Controlla se x o y contengono un tag <a>
+    if (rowA.getElementsByTagName("TD")[n].getElementsByTagName("a").length > 0) {
+      x = rowA.getElementsByTagName("TD")[n].getElementsByTagName("a")[0].textContent;
+    }
+    if (rowB.getElementsByTagName("TD")[n].getElementsByTagName("a").length > 0) {
+      y = rowB.getElementsByTagName("TD")[n].getElementsByTagName("a")[0].textContent;
+    }
+
+    return compareValues(x, y, type, dir);
+  });
+
+  // Rimuovi tutte le righe esistenti
+  while (table.rows.length > 1) {
+    table.deleteRow(1);
+  }
+
+  // Aggiungi le righe ordinate
+  rows.forEach((row, index) => {
+    table.appendChild(row);
+    // Assegna la classe in base all'indice
+   /* if (index % 2 === 0) {
+      row.className = "rowOdd";
+    } else {
+      row.className = "rowEven";
+    }*/
+  });
+  refreshTable(tableID)
+}
+
+function compareValues(x, y, type, dir) {
+  if (type === "num") {
+    x = parseFloat(x);
+    y = parseFloat(y);
+  } else if (type === "date") {
+    x = parseDate(x);
+    y = parseDate(y);
+  }
+  if (dir === "asc") {
+    return x > y ? 1 : x < y ? -1 : 0;
+  } else {
+    return x < y ? 1 : x > y ? -1 : 0;
+  }
+}
+
+function parseDate(dateString) {
+  // Assumiamo che il formato delle date sia gg/mm/aaaa
+  const parts = dateString.split("/");
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // Mesi da 0 a 11
+  const year = parseInt(parts[2], 10);
+  return new Date(year, month, day);
+}
+
+
+function compareValues(x, y, type, dir) {
+  if (type === "num") {
+    x = parseFloat(x);
+    y = parseFloat(y);
+  } else if (type === "date") {
+    x = parseDate(x);
+    y = parseDate(y);
+  }
+  if (dir === "asc") {
+    return x > y ? 1 : x < y ? -1 : 0;
+  } else {
+    return x < y ? 1 : x > y ? -1 : 0;
+  }
+}
+
+function parseDate(dateString) {
+  // Assumiamo che il formato delle date sia gg/mm/aaaa
+  const parts = dateString.split("/");
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // Mesi da 0 a 11
+  const year = parseInt(parts[2], 10);
+  return new Date(year, month, day);
+}
+
+function refreshTable(tableID) {
+  var table = document.getElementById(tableID);
+  table.style.display = 'none'; // Nascondi la tabella
+  table.offsetHeight; // Trigger reflow
+  table.style.display = ''; // Mostra di nuovo la tabella
+}
