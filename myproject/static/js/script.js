@@ -27,16 +27,15 @@ function showHideFields() {
     creditoResiduoGroup.style.display = "none";
   }
 }
-
-function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResiduo) {
+function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResiduo, contrattoId) {
   const modifyModal = new bootstrap.Modal(document.getElementById("Modify"));
   modifyModal.show();
   document.getElementById("modalNumero").textContent = numero;
   document.getElementById("modalDataAttivazione").textContent = dataAttivazione;
-  document.getElementById('hiddenNumero').value = numero;
   document.getElementById("Tipo").value = tipo;
   document.getElementById("MinutiResidui").value = minutiResidui || '';
   document.getElementById("CreditoResiduo").value = creditoResiduo || '';
+  document.getElementById("hiddenContrattoId").value = contrattoId;
   showHideFields();
 }
 
@@ -44,6 +43,7 @@ function controlloModifica() {
   const tipo = document.getElementById("Tipo").value;
   const minutiResidui = document.getElementById("MinutiResidui").value;
   const creditoResiduo = document.getElementById("CreditoResiduo").value;
+  const contrattoId = document.getElementById("hiddenContrattoId").value;
 
   const tipoWarning = document.getElementById("tipoWarning");
   const minutiResiduiWarning = document.getElementById("minutiResiduiWarning");
@@ -55,19 +55,21 @@ function controlloModifica() {
 
   let isValid = true;
   if (!tipo) {
-    tipoWarning.style.display = "block";
-    isValid = false;
+      tipoWarning.style.display = "block";
+      isValid = false;
   }
   if (tipo === "a consumo" && !minutiResidui) {
-    minutiResiduiWarning.style.display = "block";
-    isValid = false;
+      minutiResiduiWarning.style.display = "block";
+      isValid = false;
   }
   if (tipo === "a ricarica" && !creditoResiduo) {
-    creditoResiduoWarning.style.display = "block";
-    isValid = false;
+      creditoResiduoWarning.style.display = "block";
+      isValid = false;
   }
   if (isValid) {
-    document.getElementById("updateForm").submit();
+      const form = document.getElementById("updateForm");
+      form.action = `/modifica_contratto/${contrattoId}/`;
+      form.submit();
   }
 }
 

@@ -1,6 +1,3 @@
-#ATTENZIONE!!!
-#in realtà django chiama 'view' ciò che per noi è il controller!!!
-
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import connection
@@ -10,67 +7,17 @@ from .utils import formatta_data
 from .models import ContrattoTelefonico, SIMAttiva, SIMDisattiva, SIMNonAttiva, Telefonata
 
 
-"""
-esempio slides
-def paramsToJson(request):
-    if request.method== "GET":
-        params= request.GET
-    else:
-        params= request.POST
-    o = {}
-    for n in params.dict().keys():
-        o[n] = params.get(n)
-        res = HttpResponse(content_type="application/json")
-        res.write(json.dumps(o))
-        return res
-"""
-
-"""
-utilizzo sessioni (potrebbero servirci in futuro)
-def StartSession(request):
-    res = HttpResponse(content_type="text/html")
-    counter= request.session.get("counter")
-    if counter== None:
-        request.session["counter"] = 1
-        res.write("Session Started")
-    else:
-        res.write("Session alreadystarted")
-    return res
-
-def CloseSession(request):
-    res = HttpResponse(content_type="text/html")
-    counter= request.session.get("counter")
-    if counter!= None:
-        del request.session["counter"]
-        res.write("Session stopped")
-    else:
-        res.write("Session notstarted")
-    return res
-
-def SessionCount(request):
-    res = HttpResponse(content_type="text/html")
-    counter= request.session.get("counter")
-    if counter== None:
-        res.write("No session activated")
-    else:
-        counter+=1;
-        res.write("Counteris{}".format(counter))
-        request.session["counter"]=counter;
-    return res
-"""
-#view home
+# view home
 @csrf_exempt
 def home(request):
-    return render(request, '../templates/index.html')
+    return render(request, 'index.html')
 
-#view ContrattoTelefonico
 @csrf_exempt
 def contrattoTelefonico(request):
     numero = request.POST.get("Numero", "") if request.method == 'POST' else request.GET.get("Numero", "") 
     data_attivazione = request.POST.get("DataAttivazione", "")
     tipo = request.POST.get("Tipo", "")
     
-    # Convertire data_attivazione nel formato dd/mm/yy
     if data_attivazione:
         data_attivazione = formatta_data(data_attivazione)
     
@@ -87,14 +34,12 @@ def contrattoTelefonico(request):
         error = str(e)
 
     context = {
-        'results':results
+        'results': results,
+        'error': error
     }
 
-    return render(request, '../templates/contrattoTelefonico.html', context)
+    return render(request, 'contrattoTelefonico.html', context)
 
-#funzione che crea la query per cercare i contratti in base ai filtri di ricerca,
-#comprese le informazioni riguardo al numero di telefonate effettuate, la SIM attiva attualmente associata
-#e il numero di SIM disattive un tempo associate al contratto
 @csrf_exempt
 def get_contratto(numero, data_attivazione, tipo):
     query = """
@@ -122,6 +67,7 @@ def get_contratto(numero, data_attivazione, tipo):
 
     return query, params
 
+@csrf_exempt
 def modifica_contratto(request):
     if request.method == 'POST':
         numero = request.POST.get('numero')
@@ -129,9 +75,13 @@ def modifica_contratto(request):
         minuti_residui = request.POST.get('minuti_residui', None)
         credito_residuo = request.POST.get('credito_residuo', None)
 
-        print(f"Numero: {numero}, Tipo: {tipo}, MinutiResidui: {minuti_residui}, CreditoResiduo: {credito_residuo}")
+        if not numero or not tipo:
+            return HttpResponse("Dati mancanti", status=400)
 
-        contratto = get_object_or_404(ContrattoTelefonico, numero=numero)
+        try:
+            contratto = get_object_or_404(ContrattoTelefonico, numero=numero)
+        except Exception as e:
+            return HttpResponse(f"Errore: {e}", status=500)
         
         contratto.tipo = tipo
         
@@ -145,10 +95,9 @@ def modifica_contratto(request):
         contratto.save()
         return redirect('contrattoTelefonico')
     else:
-
         return render(request, 'modifica_contratto.html')
-        
 
+@csrf_exempt
 def inserisci_contratto(request):
     if request.method == 'POST':
         numero = request.POST.get('Numero')
@@ -163,18 +112,21 @@ def inserisci_contratto(request):
         minuti_residui = int(minuti_residui) if minuti_residui else None
         credito_residuo = float(credito_residuo) if credito_residuo else None
 
-        nuovo_contratto = contratto(
-            numero=numero,
-            data_attivazione=data_attivazione,
-            tipo=tipo,
-            minuti_residui=minuti_residui,
-            credito_residuo=credito_residuo
-        )
+        try:
+            nuovo_contratto = ContrattoTelefonico(
+                numero=numero,
+                data_attivazione=data_attivazione,
+                tipo=tipo,
+                minuti_residui=minuti_residui,
+                credito_residuo=credito_residuo
+            )
+            nuovo_contratto.save()
+        except Exception as e:
+            return HttpResponse(f"Errore: {e}", status=500)
         
-        nuovo_contratto.save()
         return redirect('contrattoTelefonico')
 
-    return render(request, '../templates/contrattoTelefonico.html')
+    return render(request, 'inserisci_contratto.html')
 
 @csrf_exempt
 def elimina_contratto(request, numero):
@@ -188,9 +140,7 @@ def elimina_contratto(request, numero):
 
     return redirect('contrattoTelefonico')
 
-
-
-#view SIM
+# view SIM
 @csrf_exempt
 def sim(request):
     codice = request.POST.get("Codice", "")
@@ -216,7 +166,7 @@ def sim(request):
 
     return render(request, '../templates/sim.html', context)
 
-#funzione che crea la query per cercare le SIM in base ai filtri di ricerca
+# funzione che crea la query per cercare le SIM in base ai filtri di ricerca
 def get_SIM(codice, numero, tipo, stato):
     query =""
     params = []
@@ -298,7 +248,7 @@ def get_SIM(codice, numero, tipo, stato):
 
     return query, params
 
-#view Telefonata
+# view Telefonata
 @csrf_exempt
 def telefonata(request):
     effettuata_da = request.POST.get("EffettuataDa", "") if request.method == 'POST' else request.GET.get("EffettuataDa", "")
@@ -321,12 +271,13 @@ def telefonata(request):
         error = str(e)
 
     context = {
-        'results':results
+        'results': results,
+        'error': error,
     }
 
     return render(request, '../templates/telefonata.html', context)
 
-#funzione che crea la query per cercare le SIM in base ai filtri di ricerca
+# funzione che crea la query per cercare le SIM in base ai filtri di ricerca
 @csrf_exempt
 def get_telefonata(effettuata_da, data):
     params = []
@@ -340,5 +291,5 @@ def get_telefonata(effettuata_da, data):
     if data:
         query += " AND Data = %s"
         params.append(data)
-    #query += " ORDER BY EffettuataDa"
+    # query += " ORDER BY EffettuataDa"
     return query, params
