@@ -184,6 +184,10 @@ header h1{
     color: var(--primary-color);
 }
 
+.rowContratto{
+    margin-left: 1px;
+    margin-right: 1px;
+}
 .scrollable-table-container {
     max-height: 400px; /* Imposta l'altezza massima desiderata */
     overflow-y: auto; /* Abilita lo scorrimento verticale */
@@ -201,6 +205,9 @@ header h1{
     z-index: 1; /* Assicura che l'intestazione sia sopra il corpo della tabella */
 }
 
+th.pointer{
+    cursor: pointer;
+}
 #tabellaContratto th, 
 #tabellaContratto td {
     width: 10%;
@@ -217,3 +224,14 @@ footer{
     background-color: var(--primary-color);
 }
 
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: red; /* Cambia il colore di sfondo delle righe dispari */
+}
+
+.rowEven {
+    background-color: var(--background-color);
+  }
+  
+.rowOdd {
+    background-color: var(--white-color);
+  }
