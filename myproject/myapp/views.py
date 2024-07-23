@@ -1,6 +1,7 @@
 #ATTENZIONE!!!
 #in realtà django chiama 'view' ciò che per noi è il controller!!!
 
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
@@ -160,54 +161,23 @@ def aggiungi_contratto(request):
     }
     return render(request, 'modifica_contratto.html', context)
 
-
-
-
-@csrf_exempt
-def modifica_contratto(request, numero):
-    error = None
-    context = {}
-    results={}
+def modifica_contratto(request):
     if request.method == 'POST':
+        numero = request.POST.get('Numero')
         tipo = request.POST.get('Tipo')
-        minuti_residui = request.POST.get('MinutiResidui')
         credito_residuo = request.POST.get('CreditoResiduo')
-        query = """
-                UPDATE contrattotelefonico SET Tipo = %s, MinutiResidui = %s, CreditoRedisuo = %s
-                WHERE Numero = %s
-            """
-        params = (numero, tipo, minuti_residui, credito_residuo)
+        minuti_residui = request.POST.get('MinutiResidui')
+
         try:
-                with connection.cursor() as cursor:
-                    cursor.execute(query, params)
-        except Exception as e:
-                error = str(e)
-
-        return redirect('contrattoTelefonico')
-    return render(request, 'modifica_contratto.html', context)
-
-def modifica_contratto(request, numero):
-    if request.method == 'GET':
-        numero = request.GET.get('Numero')
-        tipo = request.GET.get('Tipo')
-        minuti_residui = request.GET.get('MinutiResidui')
-        credito_residuo = request.GET.get('CreditoResiduo')
-
-        contratto = get_object_or_404(ContrattoTelefonico, numero=numero)
-
-        if tipo == 'a consumo':
+            contratto = ContrattoTelefonico.objects.get(numero=numero)
             contratto.tipo = tipo
-            contratto.minuti_residui = minuti_residui
-            contratto.credito_residuo = None
-        elif tipo == 'a ricarica':
-            contratto.tipo = tipo
-            contratto.minuti_residui = None
             contratto.credito_residuo = credito_residuo
-
-        contratto.save()
-        return redirect('contrattoTelefonico')
-    return render(request, 'contratti/modifica_contratto.html')
-
+            contratto.minuti_residui = minuti_residui
+            contratto.save()
+            return JsonResponse({'success': True})
+        except ContrattoTelefonico.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Contratto non trovato'})
+        
 @csrf_exempt
 def elimina_contratto(request, numero):
     query = "DELETE FROM contrattotelefonico WHERE Numero = %s"

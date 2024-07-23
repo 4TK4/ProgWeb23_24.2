@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="{% static '../static/js/script.js' %}"></script>
 </head>
+
 <body>
+<!-- eliminazione -->
 <div id="Alert" class="modal sfondoAlert" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content errore">
@@ -29,12 +31,37 @@
         </div>
     </div>
 </div>
+<!-- Modale di Modifica -->
+<div id="Modify" class="modal sfondoAlert" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <span class="close" onclick="document.getElementById('updateModal').style.display='none'">&times;</span>
+      <h2>Modifica Contratto</h2>
+      <form>
+        <label for="modalNumero">Numero</label>
+        <input type="text" id="modalNumero" name="modalNumero" readonly><br>
+  
+        <label for="modalDataAttivazione">Data Attivazione</label>
+        <input type="text" id="modalDataAttivazione" name="modalDataAttivazione" readonly><br>
+  
+        <label for="modalTipo">Tipo</label>
+        <input type="text" id="modalTipo" name="modalTipo"><br>
+  
+        <label for="modalCreditoResiduo">Credito Residuo</label>
+        <input type="text" id="modalCreditoResiduo" name="modalCreditoResiduo"><br>
+  
+        <label for="modalMinutiResidui">Minuti Residui</label>
+        <input type="text" id="modalMinutiResidui" name="modalMinutiResidui"><br>
+  
+        <button type="button" id="confirmUpdate">Aggiorna</button>
+      </form>
+    </div>
+  </div>
 
 <div class="row">
     <div class="col-md-2">
         <!-- Filtro di ricerca -->
         <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'contrattoTelefonico' %}">
-            {% csrf_token %} <!-- Indica che la richiesta è generata dall'applicazione e non da una fonte attaccante-->
+            {% csrf_token %} 
             <div class="form-group mb-3">
                 <label for="numero_telefono">Numero di telefono:</label>
                 <input type="tel" name="Numero"class="form-control" id="numero_telefono" pattern="[0-9]*{1,10}">
@@ -90,7 +117,11 @@
                     <td class="text-center">{% if result.Telefonate is not 0 %} <a href="{% url 'telefonata' %}?EffettuataDa={{ result.Numero }}">{{ result.Telefonate }}</a>{% else%} {{ result.Telefonate }} {% endif %}</td>
                     <td class="text-center">{% if result.SIMAttiva is not None %} <a href="{% url 'sim' %}?Stato=Attiva&Numero={{ result.Numero }}">{{ result.SIMAttiva }}</a>{% endif %}</td>
                     <td class="text-center">{% if result.SIMDisattive is not 0 %} <a href="{% url 'sim' %}?Stato=Disattiva&Numero={{ result.Numero }}">{{ result.SIMDisattive }} </a> {% else%} {{ result.SIMDisattive }}{% endif %}</td>
-                    <td class="text-center"><a href=""> <img src="{% static 'images/pencil.png' %}" height=20px width=20px alt="Modifica" class="icona"/></a></td>
+                    <td class="text-center">
+                        <a onclick="setModifica('{{ result.numero }}', '{{ result.data_attivazione }}')">
+                            <img src="{% static 'images/pencil.png' %}" height="20px" width="20px" alt="Modifica" class="icona"/>
+                        </a>
+                    </td>                    
                     <td class='text-center'><a onclick="setEliminazione('{{result.Numero}}')">
                     <img src="{% static 'images/bin.png' %}" height=20px width=20px alt="Elimina" class="icona"/></a></td>
                 </tr>
