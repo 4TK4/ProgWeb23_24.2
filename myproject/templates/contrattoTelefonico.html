@@ -32,7 +32,8 @@
             <div class="modal-body">
                 <p>Numero: <span id="modalNumero"></span></p>
                 <p>Data Attivazione: <span id="modalDataAttivazione"></span></p>
-                <form id="updateForm" autocomplete="off" method="post" action="{% url 'modifica_contratto' %}">
+                <form id="updateForm" autocomplete="off" method="post" action="{% url 'modifica_contratto' contratto_id=contratto.id %}">
+                    {% csrf_token %}
                     <div class="mb-3">
                         <label for="Tipo" class="form-label">Tipo</label>
                         <select id="Tipo" name="Tipo" class="form-select" onchange="showHideFields()">
@@ -68,7 +69,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="createForm" autocomplete="off">
+                <form id="createForm" autocomplete="off" method="post" action="{% url 'inserisci_contratto' %}">
+                    {% csrf_token %}
                     <div class="mb-3">
                         <label for="Numero2" class="form-label">Numero di telefono:</label>
                         <input type="number" name="Numero" id="Numero2" class="form-control" required min="1" max="9999999999">

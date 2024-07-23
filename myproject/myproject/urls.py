@@ -32,9 +32,9 @@ urlpatterns = [
 
     path("telefonata/", views.telefonata, name="telefonata"),
     
-    path('modifica_contratto/', views.modifica_contratto, name='modifica_contratto'),
+    path('modifica_contratto/<int:contratto_id>/', views.modifica_contratto, name='modifica_contratto'),
     
-    #path('aggiungi/', views.aggiungi_contratto, name='aggiungi_contratto'),
+    path('inserisci_contratto/', views.inserisci_contratto, name='inserisci_contratto'),
     
     path('contrattoTelefonico/elimina_contratto/<int:numero>/', views.elimina_contratto, name='elimina_contratto'),
 
