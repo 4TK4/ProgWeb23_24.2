@@ -81,24 +81,39 @@ def inserisci_contratto(request):
         # Validazione e gestione dei valori vuoti
         minuti_residui = minuti_residui if minuti_residui else None
         credito_residuo = credito_residuo if credito_residuo else None
-        query = """
-            INSERT INTO contrattotelefonico (Numero, DataAttivazione, Tipo, MinutiResidui, CreditoResiduo)
-            VALUES (%s, %s, %s, %s, %s)
-        """
-        error = ""
+        controllo_query = """SELECT COUNT(*) FROM contrattotelefonico WHERE Numero = %s"""
         try:
             with connection.cursor() as cursor:
-                cursor.execute(query, (numero, data_attivazione, tipo, minuti_residui, credito_residuo))
-            connection.commit()  # Assicurati di avere le parentesi per eseguire il commit
+                cursor.execute(controllo_query, [numero])
+                count = cursor.fetchone()[0]  # Ottieni il conteggio dalla query
+                
+                if count > 0:
+                    return redirect(reverse('inserimento_fallito'))    
+            query = """
+                INSERT INTO contrattotelefonico (Numero, DataAttivazione, Tipo, MinutiResidui, CreditoResiduo)
+                VALUES (%s, %s, %s, %s, %s)
+            """
+            error = ""
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(query, (numero, data_attivazione, tipo, minuti_residui, credito_residuo))
+                connection.commit()  # Assicurati di avere le parentesi per eseguire il commit
+            except Exception as e:
+                error = str(e)
+                # Gestisci l'errore (ad esempio, loggalo o passalo al contesto per la visualizzazione)
+                print(error)
+
+            return redirect(reverse('inserimento_successo'))
         except Exception as e:
             error = str(e)
-            # Gestisci l'errore (ad esempio, loggalo o passalo al contesto per la visualizzazione)
             print(error)
-
-        return redirect(reverse('inserimento_successo'))
+            
 
 def inserimento_successo(request):
     return render(request, 'inserimento_successo.html')
+
+def inserimento_fallito(request):
+    return render(request, 'inserimento_fallito.html')
 
 @csrf_exempt 
 def modifica_contratto(request):

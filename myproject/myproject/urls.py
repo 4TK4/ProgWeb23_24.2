@@ -33,9 +33,14 @@ urlpatterns = [
     path("telefonata/", views.telefonata, name="telefonata"),
     
     path('modifica_contratto/', views.modifica_contratto, name='modifica_contratto'),
+    
     path('modifica_successo/', views.modifica_successo, name='modifica_successo'),
+    
     path('inserisci_contratto/', views.inserisci_contratto, name='inserisci_contratto'),
+    
     path('inserimento_successo/', views.inserimento_successo, name='inserimento_successo'),
+    
+    path('inserimento_fallito/', views.inserimento_fallito, name='inserimento_fallito'),
     
     path('elimina_contratto/<int:numero>/', views.elimina_contratto, name='elimina_contratto'),
 
