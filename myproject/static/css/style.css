@@ -201,6 +201,9 @@ header h1{
     z-index: 1; /* Assicura che l'intestazione sia sopra il corpo della tabella */
 }
 
+th.pointer{
+    cursor: pointer;
+}
 #tabellaContratto th, 
 #tabellaContratto td {
     width: 10%;
