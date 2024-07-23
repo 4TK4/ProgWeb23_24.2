@@ -184,6 +184,10 @@ header h1{
     color: var(--primary-color);
 }
 
+.rowContratto{
+    margin-left: 1px;
+    margin-right: 1px;
+}
 .scrollable-table-container {
     max-height: 400px; /* Imposta l'altezza massima desiderata */
     overflow-y: auto; /* Abilita lo scorrimento verticale */
