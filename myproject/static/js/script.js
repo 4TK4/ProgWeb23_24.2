@@ -33,6 +33,7 @@ function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResidu
   modifyModal.show();
   document.getElementById("modalNumero").textContent = numero;
   document.getElementById("modalDataAttivazione").textContent = dataAttivazione;
+  document.getElementById('hiddenNumero').value = numero;
   document.getElementById("Tipo").value = tipo;
   document.getElementById("MinutiResidui").value = minutiResidui || '';
   document.getElementById("CreditoResiduo").value = creditoResiduo || '';

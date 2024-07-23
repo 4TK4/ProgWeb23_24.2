@@ -122,60 +122,25 @@ def get_contratto(numero, data_attivazione, tipo):
 
     return query, params
 
-@csrf_exempt
-def aggiungi_contratto(request):
-    error = None
-    results = []
-
-    if request.method == 'POST':
-        numero = request.POST.get('Numero', '')
-        data_attivazione = request.POST.get('DataAttivazione', '')
-        tipo = request.POST.get('Tipo', '')
-        credito_residuo = request.POST.get('CreditoResiduo', '')
-        minuti_residui = request.POST.get('MinutiResidui', '')
-
-        if data_attivazione:
-            data_attivazione = formatta_data(data_attivazione)
-
-            query = """
-                INSERT INTO contrattotelefonico (Numero, DataAttivazione, Tipo, CreditoResiduo, MinutiResidui)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """
-            params = (numero, data_attivazione, tipo, credito_residuo, minuti_residui)
-            try:
-                with connection.cursor() as cursor:
-                    cursor.execute(query, params)
-            except Exception as e:
-                error = str(e)
-                print("Errore! "+error)
-
-            print("Contratto telefonico inserito correttamente, con questi valori",params)
-            return redirect('contrattoTelefonico')
-        else:
-            error = "Errore nei dati inseriti"
-            print(error)
-    context = {
-        'results': results,
-        'error': error
-    }
-    return render(request, 'modifica_contratto.html', context)
-
 def modifica_contratto(request):
-    if request.method == 'POST':
-        numero = request.POST.get('Numero')
-        tipo = request.POST.get('Tipo')
-        credito_residuo = request.POST.get('CreditoResiduo')
-        minuti_residui = request.POST.get('MinutiResidui')
+        if request.method == 'POST':
+            numero = request.POST.get('Numero')
+            tipo = request.POST.get('Tipo')
+            minuti_residui = request.POST.get('MinutiResidui')
+            credito_residuo = request.POST.get('CreditoResiduo')
 
-        try:
-            contratto = ContrattoTelefonico.objects.get(numero=numero)
-            contratto.tipo = tipo
-            contratto.credito_residuo = credito_residuo
-            contratto.minuti_residui = minuti_residui
-            contratto.save()
-            return JsonResponse({'success': True})
-        except ContrattoTelefonico.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Contratto non trovato'})
+            print(f"Numero: {numero}, Tipo: {tipo}, MinutiResidui: {minuti_residui}, CreditoResiduo: {credito_residuo}")
+            contratto = get_object_or_404(ContrattoTelefonico, Numero=numero)
+            contratto.Tipo = tipo
+        if tipo == 'a ricarica':
+            contratto.CreditoResiduo = credito_residuo
+            contratto.MinutiResidui = None 
+        elif tipo == 'a consumo':
+            contratto.MinutiResidui = minuti_residui
+            contratto.CreditoResiduo = None 
+
+        contratto.save()
+        return redirect('contrattoTelefonico')
         
 @csrf_exempt
 def elimina_contratto(request, numero):
