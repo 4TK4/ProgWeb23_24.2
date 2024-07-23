@@ -33,7 +33,7 @@
             <div class="modal-body">
                 <p>Numero: <span id="modalNumero"></span></p>
                 <p>Data Attivazione: <span id="modalDataAttivazione"></span></p>
-                <form id="updateForm" autocomplete="off">
+                <form id="updateForm" autocomplete="off" method="post" action="{% url 'modifica_contratto' %}">
                     <div class="mb-3">
                         <label for="Tipo" class="form-label">Tipo</label>
                         <select id="Tipo" name="Tipo" class="form-select" onchange="showHideFields()">
@@ -53,7 +53,7 @@
                         <input type="number" name="CreditoResiduo" id="CreditoResiduo" class="form-control"/>
                         <div id="creditoResiduoWarning" class="invalid-feedback">Campo obbligatorio</div>
                     </div>
-                    <button type="button" onclick="controlloModifica()" class="btn btn-primary">Aggiorna</button>
+                    <button type="submit" onclick="controlloModifica()" class="btn btn-primary">Aggiorna</button>
                 </form>
             </div>
         </div>
@@ -168,7 +168,7 @@
                     <td class="text-center" id="tSIMAttiva">{% if result.SIMAttiva is not None %} <a href="{% url 'sim' %}?Stato=Attiva&Numero={{ result.Numero }}">{{ result.SIMAttiva }}</a>{% endif %}</td>
                     <td class="text-center" id="tSIMDisattive">{% if result.SIMDisattive is not 0 %} <a href="{% url 'sim' %}?Stato=Disattiva&Numero={{ result.Numero }}">{{ result.SIMDisattive }} </a> {% else%} {{ result.SIMDisattive }}{% endif %}</td>
                     <td class="text-center" id="tModifica">
-                        <a onclick="setModifica('{{ result.Numero }}', '{{ result.DataAttivazione }}');">
+                        <a onclick="setModifica('{{ result.Numero }}', '{{ result.DataAttivazione }}','{{ result.Tipo }}','{{ result.MinutiResidui }}','{{ result.CrditoResiduo }}');">
                             <img src="{% static 'images/pencil.png' %}" height="20px" width="20px" alt="Modifica" class="icona"/>
                         </a>
                     </td>

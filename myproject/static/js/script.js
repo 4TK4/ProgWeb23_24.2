@@ -35,7 +35,6 @@ function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResidu
   document.getElementById("Tipo").value = tipo;
   document.getElementById("MinutiResidui").value = minutiResidui || '';
   document.getElementById("CreditoResiduo").value = creditoResiduo || '';
-  document.getElementById("hiddenContrattoId").value = contrattoId;
   showHideFields();
 }
 

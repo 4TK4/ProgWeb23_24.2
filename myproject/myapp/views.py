@@ -116,13 +116,12 @@ def modifica_contratto(request):
         query = """
             UPDATE contrattotelefonico
             SET Tipo = %s, MinutiResidui = %s, CreditoResiduo = %s
-            WHERE Numero = %s AND DataAttivazione = %s;
+            WHERE Numero = %s;
         """
-
         error = ""
         try:
             with connection.cursor() as cursor:
-                cursor.execute(query, (tipo, minuti_residui, credito_residuo, numero, data_attivazione))
+                cursor.execute(query, (tipo, minuti_residui, credito_residuo, numero))
             connection.commit()
         except Exception as e:
             error = str(e)
