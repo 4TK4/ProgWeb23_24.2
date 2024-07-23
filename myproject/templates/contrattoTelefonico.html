@@ -21,9 +21,8 @@
     </div>
 </div>
 
-
 <!-- Modale Modifica Contratto -->
-<div class="modal fade" id="Modify" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="Modify" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -60,6 +59,54 @@
     </div>
 </div>
 
+<!-- Modale Inserimento Contratto -->
+<div id="Insert" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="insertModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="insertModalLabel">Inserimento Contratto Telefonico</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createForm" autocomplete="off">
+                    <div class="mb-3">
+                        <label for="Numero2" class="form-label">Numero di telefono:</label>
+                        <input type="number" name="Numero" id="Numero2" class="form-control" required min="1" max="9999999999">
+                        <div id="numeroWarning" class="invalid-feedback">Campo obbligatorio</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="DataAttivazione2" class="form-label">Data Attivazione:</label>
+                        <input type="date" name="DataAttivazione" id="DataAttivazione2" class="form-control"
+                            value="<?php echo date('Y-m-d'); ?>" required />
+                        <div id="dataAttivazioneWarning2" class="invalid-feedback">Campo obbligatorio</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Tipo2" class="form-label">Tipo:</label>
+                        <select id="Tipo2" name="Tipo" class="form-select" onchange="showHideFieldsInsert()">
+                            <option value="" disabled selected hidden>Tipologia Contratto</option>
+                            <option value="a ricarica">A ricarica</option>
+                            <option value="a consumo">A consumo</option>
+                        </select>
+                        <div id="tipoWarning2" class="invalid-feedback">Campo obbligatorio</div>
+                    </div>
+                    <div class="mb-3" id="minutiResiduiGroup2" style="display: none;">
+                        <label for="MinutiResidui2" class="form-label">Minuti Residui:</label>
+                        <input type="number" name="MinutiResidui" id="MinutiResidui2" class="form-control" />
+                        <div id="minutiResiduiWarning2" class="invalid-feedback">Campo obbligatorio</div>
+                    </div>
+                    <div class="mb-3" id="creditoResiduoGroup2" style="display: none;">
+                        <label for="CreditoResiduo2" class="form-label">Credito Residuo:</label>
+                        <input type="number" name="CreditoResiduo" id="CreditoResiduo2" class="form-control" />
+                        <div id="creditoResiduoWarning2" class="invalid-feedback">Campo obbligatorio</div>
+                    </div>
+                    <button type="button" onclick="controlloInserimento()" class="btn btn-primary">Inserisci</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="row">
     <div class="col-md-2">
         <!-- Filtro di ricerca -->
@@ -83,7 +130,7 @@
             </div>
             <div class="d-flex flex-column align-items-center">
                 <button class="btn btn-outline-success mb-4 search-button" type="submit">Cerca</button>
-                <button class="btn btn-outline-primary add-button" type="button" onclick="">Aggiungi nuovo contratto</button>
+                <button class="btn btn-outline-primary add-button" type="button" onclick="setInsert()">Aggiungi nuovo contratto</button>
             </div>
         </form>
     </div>
