@@ -169,7 +169,7 @@ function sortTable(n, type, tableID) {
 
   // Aggiungi le righe ordinate
   rows.forEach((row, index) => {
-    table.appendChild(row);
+    table.getElementsByTagName("tbody")[0].appendChild(row);
     // Assegna la classe in base all'indice
    /* if (index % 2 === 0) {
       row.className = "rowOdd";
