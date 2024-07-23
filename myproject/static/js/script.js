@@ -68,7 +68,6 @@ function controlloModifica() {
   }
   if (isValid) {
       const form = document.getElementById("updateForm");
-      form.action = `/modifica_contratto/${contrattoId}/`;
       form.submit();
   }
 }

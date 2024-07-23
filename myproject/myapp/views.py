@@ -1,6 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import connection
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from .utils import formatta_data
@@ -67,66 +68,69 @@ def get_contratto(numero, data_attivazione, tipo):
 
     return query, params
 
-@csrf_exempt
-def modifica_contratto(request):
-    if request.method == 'POST':
-        numero = request.POST.get('numero')
-        tipo = request.POST.get('tipo')
-        minuti_residui = request.POST.get('minuti_residui', None)
-        credito_residuo = request.POST.get('credito_residuo', None)
-
-        if not numero or not tipo:
-            return HttpResponse("Dati mancanti", status=400)
-
-        try:
-            contratto = get_object_or_404(ContrattoTelefonico, numero=numero)
-        except Exception as e:
-            return HttpResponse(f"Errore: {e}", status=500)
-        
-        contratto.tipo = tipo
-        
-        if tipo == 'a ricarica':
-            contratto.credito_residuo = credito_residuo
-            contratto.minuti_residui = None 
-        elif tipo == 'a consumo':
-            contratto.minuti_residui = minuti_residui
-            contratto.credito_residuo = None 
-
-        contratto.save()
-        return redirect('contrattoTelefonico')
-    else:
-        return render(request, 'modifica_contratto.html')
-
-@csrf_exempt
+@csrf_exempt 
 def inserisci_contratto(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         numero = request.POST.get('Numero')
         data_attivazione = request.POST.get('DataAttivazione')
         tipo = request.POST.get('Tipo')
-        minuti_residui = request.POST.get('MinutiResidui', None)
-        credito_residuo = request.POST.get('CreditoResiduo', None)
+        minuti_residui = request.POST.get('MinutiResidui')
+        credito_residuo = request.POST.get('CreditoResiduo')
         
-        if not numero or not data_attivazione or not tipo:
-            return HttpResponse("Dati mancanti", status=400)
-
-        minuti_residui = int(minuti_residui) if minuti_residui else None
-        credito_residuo = float(credito_residuo) if credito_residuo else None
-
+        data_attivazione = formatta_data(data_attivazione)
+        # Validazione e gestione dei valori vuoti
+        minuti_residui = minuti_residui if minuti_residui else None
+        credito_residuo = credito_residuo if credito_residuo else None
+        query = """
+            INSERT INTO contrattotelefonico (Numero, DataAttivazione, Tipo, MinutiResidui, CreditoResiduo)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        error = ""
         try:
-            nuovo_contratto = ContrattoTelefonico(
-                numero=numero,
-                data_attivazione=data_attivazione,
-                tipo=tipo,
-                minuti_residui=minuti_residui,
-                credito_residuo=credito_residuo
-            )
-            nuovo_contratto.save()
+            with connection.cursor() as cursor:
+                cursor.execute(query, (numero, data_attivazione, tipo, minuti_residui, credito_residuo))
+            connection.commit()  # Assicurati di avere le parentesi per eseguire il commit
         except Exception as e:
-            return HttpResponse(f"Errore: {e}", status=500)
-        
-        return redirect('contrattoTelefonico')
+            error = str(e)
+            # Gestisci l'errore (ad esempio, loggalo o passalo al contesto per la visualizzazione)
+            print(error)
 
-    return render(request, 'inserisci_contratto.html')
+        return redirect(reverse('inserimento_successo'))
+
+def inserimento_successo(request):
+    return render(request, 'inserimento_successo.html')
+
+@csrf_exempt 
+def modifica_contratto(request):
+    if request.method == "POST":
+        numero = request.POST.get('Numero')
+        data_attivazione = request.POST.get('DataAttivazione')
+        tipo = request.POST.get('Tipo')
+        minuti_residui = request.POST.get('MinutiResidui')
+        credito_residuo = request.POST.get('CreditoResiduo')
+
+        # Validazione e gestione dei valori vuoti
+        minuti_residui = minuti_residui if minuti_residui else None
+        credito_residuo = credito_residuo if credito_residuo else None
+
+        query = """
+            UPDATE contrattotelefonico
+            SET Tipo = %s, MinutiResidui = %s, CreditoResiduo = %s
+            WHERE Numero = %s AND DataAttivazione = %s;
+        """
+
+        error = ""
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (tipo, minuti_residui, credito_residuo, numero, data_attivazione))
+            connection.commit()
+        except Exception as e:
+            error = str(e)
+            print(error)
+        return redirect(reverse('modifica_successo'))
+
+def modifica_successo(request):
+    return render(request, 'modifica_successo.html')
 
 @csrf_exempt
 def elimina_contratto(request, numero):
@@ -137,7 +141,6 @@ def elimina_contratto(request, numero):
     except Exception as e:
         error = str(e)
         return redirect('numero', {'error': error})
-
     return redirect('contrattoTelefonico')
 
 # view SIM

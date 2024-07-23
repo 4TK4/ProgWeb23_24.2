@@ -61,7 +61,6 @@
   </div>
 </div>
 
-
 <!-- Modale Inserimento Contratto -->
 <div id="Insert" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="insertModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -81,7 +80,7 @@
                     <div class="mb-3">
                         <label for="DataAttivazione2" class="form-label">Data Attivazione:</label>
                         <input type="date" name="DataAttivazione" id="DataAttivazione2" class="form-control"
-                            value="<?php echo date('Y-m-d'); ?>" required />
+                            value="{{ today }}" required />
                         <div id="dataAttivazioneWarning2" class="invalid-feedback">Campo obbligatorio</div>
                     </div>
                     <div class="mb-3">
@@ -103,12 +102,13 @@
                         <input type="number" name="CreditoResiduo" id="CreditoResiduo2" class="form-control" />
                         <div id="creditoResiduoWarning2" class="invalid-feedback">Campo obbligatorio</div>
                     </div>
-                    <button type="button" onclick="controlloInserimento()" class="btn btn-primary">Inserisci</button>
+                    <button type="submit" class="btn btn-primary">Inserisci</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 
 <div class="row">

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="alert alert-success" role="alert">
+  Il contratto è stato modificato con successo!
+</div>
+<a href="{% url 'contrattoTelefonico' %}" class="btn btn-primary">Torna alla lista dei contratti</a>
+{% endblock %}
