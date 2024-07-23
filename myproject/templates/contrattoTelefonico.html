@@ -90,11 +90,11 @@
 
         <div class="scrollable-table-container">
         <!-- Tabella dei contratti -->
-        <table class="table table-striped table-spaced">
+        <table class="table table-striped table-spaced" id="tabellaContratto">
             <thead>
                 <tr>
-                    <th class="text-center">Numero ↕</th>
-                    <th class="text-center">Data Attivazione ↕</th>
+                    <th class="text-center" onclick="sortTable(0, 'num', 'tabellaContratto')">Numero ↕</th>
+                    <th class="text-center" onclick="sortTable(1, 'date', 'tabellaContratto')">Data Attivazione ↕</th>
                     <th class="text-center">Tipo</th>
                     <th class="text-center">Minuti Residui</th>
                     <th class="text-center">Credito Residuo</th>

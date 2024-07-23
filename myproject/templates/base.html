@@ -8,11 +8,9 @@
     <script type="text/javascript" src="../static/js/script.js"></script>
     <title>{% block title %}{% endblock %}</title>
     {% load django_bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href={% static 'css/style.css' %}
+    <link rel="stylesheet" type="text/css" href={% static 'css/style.css' %}
     />
+    <script type="text/javascript" src={% static 'js/script.js' %}></script>
   </head>
 
   <body>

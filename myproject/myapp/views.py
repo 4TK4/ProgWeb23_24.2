@@ -90,7 +90,6 @@ def contrattoTelefonico(request):
         'results':results
     }
 
-    print(results)
     return render(request, '../templates/contrattoTelefonico.html', context)
 
 #funzione che crea la query per cercare i contratti in base ai filtri di ricerca,
@@ -342,5 +341,5 @@ def get_telefonata(effettuata_da, data):
     if data:
         query += " AND Data = %s"
         params.append(data)
-    query += " ORDER BY EffettuataDa"
+    #query += " ORDER BY EffettuataDa"
     return query, params
