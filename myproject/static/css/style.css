@@ -87,6 +87,11 @@ header h1 {
     font-size: 1.2vw;
 }
 
+.modal{
+    background: rgba(122, 78, 78, 0.41);
+    backdrop-filter: blur(8px);
+}
+
 .pulsanti {
     padding: 0;
     border-top: none;
@@ -135,7 +140,7 @@ header h1 {
 
 
 
-.form-control:hover {
+.form-control:hover, .form-select:hover {
     border: gray 1px solid;
     transition: ease-in-out 0.2s;
 }

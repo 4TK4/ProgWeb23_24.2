@@ -143,6 +143,28 @@ function controlloInserimento() {
 }
 
 
+// Funzione per modificare il testo degli elementi <a> solo se la larghezza dello schermo è <= 768px
+function modificaTestoMail() {
+  var screenWidth = window.innerWidth; // Ottieni la larghezza dello schermo
+
+  if (screenWidth <= 768) {
+    var links = document.querySelectorAll(".mail-link"); // Seleziona tutti gli elementi <a> con la classe 'email-link'
+
+    links.forEach(function (link) {
+      var testoOriginale = link.textContent; // Salva il testo originale
+      var nomeCognome = testoOriginale.split("@")[0]; // Ottieni solo il nome.cognome
+
+      link.textContent = nomeCognome; // Modifica il testo dell'elemento <a> con nome.cognome
+    });
+  }
+}
+
+// Esegui la funzione al caricamento della pagina e al ridimensionamento della finestra
+window.onload = modificaTestoMail;
+window.onresize = modificaTestoMail;
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //metodi necessari per l'ordinamento di una tabella, data la posizione del campo da considerare(n), il tipo del dato del campo e l'id della tabella su cui si sta lavorando
 function sortTable(n, type, tableID) {
