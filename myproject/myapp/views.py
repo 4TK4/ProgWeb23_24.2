@@ -115,9 +115,10 @@ def inserimento_successo(request):
 def inserimento_fallito(request):
     return render(request, 'inserimento_fallito.html')
 
+@csrf_exempt 
 def modifica_contratto(request):
     if request.method == "POST":
-        numero = request.POST.get('hiddenNumero')
+        numero = request.POST.get('Numero')
         tipo = request.POST.get('Tipo')
         minuti_residui = request.POST.get('MinutiResidui')
         credito_residuo = request.POST.get('CreditoResiduo')

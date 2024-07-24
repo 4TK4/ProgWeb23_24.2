@@ -27,7 +27,7 @@ function showHideFields() {
     creditoResiduoGroup.style.display = "none";
   }
 }
-function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResiduo, contrattoId) {
+function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResiduo) {
   const modifyModal = new bootstrap.Modal(document.getElementById("Modify"));
   modifyModal.show();
   document.getElementById("modalNumero").textContent = numero;
@@ -35,8 +35,10 @@ function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResidu
   document.getElementById("Tipo").value = tipo;
   document.getElementById("MinutiResidui").value = minutiResidui || '';
   document.getElementById("CreditoResiduo").value = creditoResiduo || '';
+  document.getElementById("hiddenNumero").value = numero;
   showHideFields();
 }
+
 
 function controlloModifica() {
   const tipo = document.getElementById("Tipo").value;
@@ -67,6 +69,7 @@ function controlloModifica() {
   }
   if (isValid) {
       const form = document.getElementById("updateForm");
+      
       form.submit();
   }
 }

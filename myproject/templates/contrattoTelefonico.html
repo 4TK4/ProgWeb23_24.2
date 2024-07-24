@@ -21,7 +21,6 @@
     </div>
 </div>
 
-
 <!-- Modale Modifica Contratto -->
 <div class="modal fade" id="Modify" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -32,11 +31,17 @@
             </div>
             <div class="modal-body">
                 <form id="updateForm" autocomplete="off" method="post" action="{% url 'modifica_contratto' %}">
+                    {% csrf_token %}
                     <div class="mb-3">
-                        <div class="mb-3">
-                            <label for="Numero" class="form-label">Numero</label>
-                            <input type="text" name="Numero" id="modalNumero" class="form-control" />
-                        </div>
+                        <label for="modalNumero" class="form-label">Numero</label>
+                        <p id="modalNumero" class="form-control-plaintext"></p>
+                        <input type="hidden" name="Numero" id="hiddenNumero">
+                    </div>
+                    <div class="mb-3">
+                        <label for="modalDataAttivazione" class="form-label">Data di Attivazione</label>
+                        <p id="modalDataAttivazione" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
                         <label for="Tipo" class="form-label">Tipo</label>
                         <select id="Tipo" name="Tipo" class="form-select" onchange="showHideFields()">
                             <option value="" disabled selected hidden>Tipologia Contratto</option>
@@ -60,7 +65,6 @@
             </div>
         </div>
     </div>
-  </div>
 </div>
 
 <!-- Modale Inserimento Contratto -->
