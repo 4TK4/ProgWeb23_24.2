@@ -115,10 +115,9 @@ def inserimento_successo(request):
 def inserimento_fallito(request):
     return render(request, 'inserimento_fallito.html')
 
-@csrf_exempt 
 def modifica_contratto(request):
     if request.method == "POST":
-        numero = request.POST.get('Numero')
+        numero = request.POST.get('hiddenNumero')
         tipo = request.POST.get('Tipo')
         minuti_residui = request.POST.get('MinutiResidui')
         credito_residuo = request.POST.get('CreditoResiduo')
@@ -155,6 +154,9 @@ def elimina_contratto(request, numero):
         error = str(e)
         return redirect('numero', {'error': error})
     return redirect(reverse('elimina_successo'))
+
+def elimina_successo(request):
+    return render(request, 'elimina_successo.html')
 
 # view SIM
 @csrf_exempt
