@@ -154,7 +154,7 @@ def elimina_contratto(request, numero):
     except Exception as e:
         error = str(e)
         return redirect('numero', {'error': error})
-    return redirect('contrattoTelefonico')
+    return redirect(reverse('elimina_successo'))
 
 # view SIM
 @csrf_exempt

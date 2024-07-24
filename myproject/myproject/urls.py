@@ -43,5 +43,7 @@ urlpatterns = [
     path('inserimento_fallito/', views.inserimento_fallito, name='inserimento_fallito'),
     
     path('elimina_contratto/<int:numero>/', views.elimina_contratto, name='elimina_contratto'),
+    
+    path('elimina_successo/', views.elimina_successo, name='elimina_successo'),
 
 ]
