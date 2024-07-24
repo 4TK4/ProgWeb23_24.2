@@ -12,11 +12,11 @@
             {% csrf_token %} <!-- Indica che la richiesta è generata dall'applicazione e non da una fonte attaccante-->
             <div class="form-group mb-3">
                 <label for="codice">Codice:</label>
-                <input type="text" name="Codice" class="form-control" id="codice" pattern="[a-zA-Z0-9]{1,9}">
+                <input type="text" name="Codice" class="form-control" id="codice" pattern="[a-zA-Z0-9]{1,9}" title="solo lettere e numeri, al massimo 9 caratteri">
             </div>
             <div class="form-group mb-3">
                 <label for="numero_telefono">Numero di telefono:</label>
-                <input type="tel" name="Numero" class="form-control" id="numero_telefono" pattern="[0-9]{1,10}">
+                <input type="tel" name="Numero" class="form-control" id="numero_telefono" pattern="[0-9]{1,10}" title="solo numeri, al massimo 10 cifre">
             </div>
             <div class="form-group mb-3">
                 <label for="tipologia_sim">Tipologia SIM:</label>
@@ -24,6 +24,7 @@
                     <option value="" class="text-secondary">Qualsiasi tipologia</option>
                     <option value="Standard">Standard</option>
                     <option value="Micro">Micro</option>
+                    <option value="Nano">Nano</option>
                     <option value="Elettronica">Elettronica</option>
                 </select>
             </div>
@@ -46,7 +47,7 @@
 
         <div class="table-responsive scrollable-table-container">
         <!-- Tabella delle SIM -->
-        <table class="table table-striped table-spaced" id="tabellaSIM">
+        <table class="table table-striped table-spaced table-hover" id="tabellaSIM">
             <thead>
                 <tr>
                     <th class="text-center pointer" onclick="sortTable(0, 'string', 'tabellaSIM')">Codice ↕</th>

@@ -96,6 +96,7 @@ function setInsert() {
   insertModal.show();
 }
 
+
 function controlloInserimento() {
   const numero = document.getElementById("Numero2").value;
   const dataAttivazione = document.getElementById("DataAttivazione2").value;
@@ -141,17 +142,20 @@ function controlloInserimento() {
   }
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//metodi necessari per l'ordinamento di una tabella, data la posizione del campo da considerare(n), il tipo del dato del campo e l'id della tabella su cui si sta lavorando
 function sortTable(n, type, tableID) {
   const table = document.getElementById(tableID);
-  const rows = Array.from(table.rows).slice(1); // Ottieni tutte le righe tranne l'intestazione
+  const rows = Array.from(table.rows).slice(1); // Ottengo tutte le righe tranne l'intestazione
   const dir = table.getAttribute("data-sort-dir") === "asc" ? "desc" : "asc";
-  table.setAttribute("data-sort-dir", dir); // Aggiorna la direzione di ordinamento
+  table.setAttribute("data-sort-dir", dir); // Cambio la direzione di ordinamento
 
   rows.sort((rowA, rowB) => {
     let x = rowA.getElementsByTagName("TD")[n].innerText;
     let y = rowB.getElementsByTagName("TD")[n].innerText;
 
-    // Controlla se x o y contengono un tag <a>
+    // Controllo se x o y contengono un tag <a>; in tal caso bisogna prendere il contenuto dell'elemento <a>
     if (rowA.getElementsByTagName("TD")[n].getElementsByTagName("a").length > 0) {
       x = rowA.getElementsByTagName("TD")[n].getElementsByTagName("a")[0].textContent;
     }
@@ -162,24 +166,27 @@ function sortTable(n, type, tableID) {
     return compareValues(x, y, type, dir);
   });
 
-  // Rimuovi tutte le righe esistenti
+  // Rimuovo tutte le righe esistenti
   while (table.rows.length > 1) {
     table.deleteRow(1);
   }
 
-  // Aggiungi le righe ordinate
+  // Aggiungo le righe ordinate nell'elemento <tbody>
   rows.forEach((row, index) => {
     table.getElementsByTagName("tbody")[0].appendChild(row);
-    // Assegna la classe in base all'indice
-   /* if (index % 2 === 0) {
-      row.className = "rowOdd";
-    } else {
-      row.className = "rowEven";
-    }*/
   });
-  refreshTable(tableID)
 }
 
+//metodo per passare da gg/mm/aaaa a aaaa/mm/gg
+function parseDate(dateString) {
+  const parts = dateString.split("/");
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // Mesi da 0 a 11
+  const year = parseInt(parts[2], 10);
+  return new Date(year, month, day);
+}
+
+//metodo che esegue il confronto fra due valori, in base al loro tipo e al criterio di ordinamento (asc/desc)
 function compareValues(x, y, type, dir) {
   if (type === "num") {
     x = parseFloat(x);
@@ -194,44 +201,4 @@ function compareValues(x, y, type, dir) {
     return x < y ? 1 : x > y ? -1 : 0;
   }
 }
-
-function parseDate(dateString) {
-  // Assumiamo che il formato delle date sia gg/mm/aaaa
-  const parts = dateString.split("/");
-  const day = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10) - 1; // Mesi da 0 a 11
-  const year = parseInt(parts[2], 10);
-  return new Date(year, month, day);
-}
-
-
-function compareValues(x, y, type, dir) {
-  if (type === "num") {
-    x = parseFloat(x);
-    y = parseFloat(y);
-  } else if (type === "date") {
-    x = parseDate(x);
-    y = parseDate(y);
-  }
-  if (dir === "asc") {
-    return x > y ? 1 : x < y ? -1 : 0;
-  } else {
-    return x < y ? 1 : x > y ? -1 : 0;
-  }
-}
-
-function parseDate(dateString) {
-  // Assumiamo che il formato delle date sia gg/mm/aaaa
-  const parts = dateString.split("/");
-  const day = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10) - 1; // Mesi da 0 a 11
-  const year = parseInt(parts[2], 10);
-  return new Date(year, month, day);
-}
-
-function refreshTable(tableID) {
-  var table = document.getElementById(tableID);
-  table.style.display = 'none'; // Nascondi la tabella
-  table.offsetHeight; // Trigger reflow
-  table.style.display = ''; // Mostra di nuovo la tabella
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,18 +1,23 @@
+#ATTENZIONE!!!
+#è il file con i controller: django chiama 'view' ciò che in realtà è un controller
+
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import connection
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-from .utils import formatta_data
+from .utils import formatta_data, get_contratto, get_SIM, get_telefonata
 from .models import ContrattoTelefonico, SIMAttiva, SIMDisattiva, SIMNonAttiva, Telefonata
 
 
-# view home
+#controller che chiama la pagina index.html
 @csrf_exempt
 def home(request):
     return render(request, 'index.html')
 
+
+#controller che chiama la pagina contrattoTelefonico.html
 @csrf_exempt
 def contrattoTelefonico(request):
     numero = request.POST.get("Numero", "") if request.method == 'POST' else request.GET.get("Numero", "") 
@@ -41,33 +46,8 @@ def contrattoTelefonico(request):
 
     return render(request, 'contrattoTelefonico.html', context)
 
-@csrf_exempt
-def get_contratto(numero, data_attivazione, tipo):
-    query = """
-        SELECT
-            c.*,
-            (SELECT COUNT(*) FROM telefonata t WHERE t.EffettuataDa = c.Numero) AS Telefonate,
-            (SELECT s.Codice FROM simattiva s WHERE s.AssociataA = c.Numero) AS SIMAttiva,
-            (SELECT COUNT(*) FROM simdisattiva sd WHERE sd.EraAssociataA = c.Numero) AS SIMDisattive
-        FROM
-            contrattotelefonico c
-        WHERE
-            1=1
-    """
-    params = []
 
-    if numero:
-        query += " AND c.Numero = %s"
-        params.append(numero)
-    if data_attivazione:
-        query += " AND c.DataAttivazione = %s"
-        params.append(data_attivazione)
-    if tipo:
-        query += " AND c.Tipo = %s"
-        params.append(tipo)
-
-    return query, params
-
+#controller per l'inserimento di un nuovo contratto
 @csrf_exempt 
 def inserisci_contratto(request):
     if request.method == "POST":
@@ -107,14 +87,19 @@ def inserisci_contratto(request):
         except Exception as e:
             error = str(e)
             print(error)
+    
             
-
+#controller che chiama la pagina di notifica di avvenuto inserimento di un contratto
 def inserimento_successo(request):
     return render(request, 'inserimento_successo.html')
 
+
+#controller che chiama la pagina di notifica di fallito inserimento di un contratto
 def inserimento_fallito(request):
     return render(request, 'inserimento_fallito.html')
 
+
+#controller per la modifica di un contratto
 @csrf_exempt 
 def modifica_contratto(request):
     if request.method == "POST":
@@ -142,9 +127,13 @@ def modifica_contratto(request):
             print(error)
         return redirect(reverse('modifica_successo'))
 
+
+#controller che chiama la pagina di notifica di avvenuta modifica di un contratto
 def modifica_successo(request):
     return render(request, 'modifica_successo.html')
 
+
+#controller per l'eliminazione di un contratto
 @csrf_exempt
 def elimina_contratto(request, numero):
     query = "DELETE FROM contrattotelefonico WHERE Numero = %s"
@@ -159,7 +148,8 @@ def elimina_contratto(request, numero):
 def elimina_successo(request):
     return render(request, 'elimina_successo.html')
 
-# view SIM
+
+#controller che chiama la pagina sim.html
 @csrf_exempt
 def sim(request):
     codice = request.POST.get("Codice", "")
@@ -185,89 +175,8 @@ def sim(request):
 
     return render(request, '../templates/sim.html', context)
 
-# funzione che crea la query per cercare le SIM in base ai filtri di ricerca
-def get_SIM(codice, numero, tipo, stato):
-    query =""
-    params = []
-    if not stato or stato == "":
-        query += """ SELECT * FROM simattiva WHERE 1=1 """
-        if codice:
-            query += " AND Codice = %s"
-            params.append(codice)
-        if numero:
-            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
-            params.append(numero)
-            params.append(numero)
-        if tipo:
-            query += " AND TipoSIM = %s"
-            params.append(tipo)
 
-        query += """UNION SELECT * FROM simdisattiva WHERE 1=1 """
-        if codice:
-            query += " AND Codice = %s"
-            params.append(codice)
-        if numero:
-            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
-            params.append(numero)
-            params.append(numero)
-        if tipo:
-            query += " AND TipoSIM = %s"
-            params.append(tipo)
-
-        query += """UNION SELECT * FROM simnonattiva WHERE 1=1 """
-        if codice:
-            query += " AND Codice = %s"
-            params.append(codice)
-        if numero:
-            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
-            params.append(numero)
-            params.append(numero)
-        if tipo:
-            query += " AND TipoSIM = %s"
-            params.append(tipo)
-
-    elif stato and stato == "Attiva":
-        query = """ SELECT * FROM simattiva WHERE 1=1 """
-        if codice:
-            query += " AND Codice = %s"
-            params.append(codice)
-        if numero:
-            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
-            params.append(numero)
-            params.append(numero)
-        if tipo:
-            query += " AND TipoSIM = %s"
-            params.append(tipo)
-
-    elif stato and stato == "Disattiva":
-        query = """ SELECT * FROM simdisattiva WHERE 1=1 """
-        if codice:
-            query += " AND Codice = %s"
-            params.append(codice)
-        if numero:
-            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
-            params.append(numero)
-            params.append(numero)
-        if tipo:
-            query += " AND TipoSIM = %s"
-            params.append(tipo)
-
-    elif stato and stato == "Non attivata":
-        query = """ SELECT * FROM simnonattiva WHERE 1=1 """
-        if codice:
-            query += " AND Codice = %s"
-            params.append(codice)
-        if numero:
-            query += " AND (AssociataA = %s OR EraAssociataA = %s)"
-            params.append(numero)
-            params.append(numero)
-        if tipo:
-            query += " AND TipoSIM = %s"
-            params.append(tipo)
-
-    return query, params
-
-# view Telefonata
+#controller che chiama la pagina telefonata.html
 @csrf_exempt
 def telefonata(request):
     effettuata_da = request.POST.get("EffettuataDa", "") if request.method == 'POST' else request.GET.get("EffettuataDa", "")
@@ -296,19 +205,4 @@ def telefonata(request):
 
     return render(request, '../templates/telefonata.html', context)
 
-# funzione che crea la query per cercare le SIM in base ai filtri di ricerca
-@csrf_exempt
-def get_telefonata(effettuata_da, data):
-    params = []
-    query = """
-    SELECT * FROM telefonata WHERE 1=1
-    """
-    params = []
-    if effettuata_da:
-        query += " AND EffettuataDa = %s"
-        params.append(effettuata_da)
-    if data:
-        query += " AND Data = %s"
-        params.append(data)
-    # query += " ORDER BY EffettuataDa"
-    return query, params
+

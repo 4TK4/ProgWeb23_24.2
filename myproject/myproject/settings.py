@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',
-    'django_bootstrap5',
+    'myapp', #è la nostra applicazione
+    'django_bootstrap5', #per usare bootstrap all'interno dei template
 ]
 
 MIDDLEWARE = [
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'], #i template sono nella cartella myproject/templates/
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,7 +74,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+#il db si chiama my_tr3mm; vi si accede con username=root, password=root. Impostare i parametri host e port come questi qui sotto
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
