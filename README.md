@@ -4,7 +4,7 @@ Progetto di gruppo per la realizzazione di un sito web relativo ad un gestionale
 ## Membri
 1081134 - Colombo Lorenzo  
 1078817 - Poloni Luca  
-10 - Brasi Alessandro
+1083914 - Brasi Alessandro
 ## Installation
 ### Python
 Se non è già presente sulla macchina, installarlo dal seguente link: [Python Download](https://www.python.org/ftp/python/3.12.4/python-3.12.4-amd64.exe)  
