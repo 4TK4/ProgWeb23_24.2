@@ -1,6 +1,10 @@
 # PW24 - Programmazione Web
 
 Progetto di gruppo per la realizzazione di un sito web relativo ad un gestionale per database di un'impresa di telefonia
+## Membri
+1081134 - Colombo Lorenzo  
+10 - Poloni Luca  
+10 - Brasi Alessandro
 ## Installation
 ### Python
 Se non è già presente sulla macchina, installarlo dal seguente link: [Python Download](https://www.python.org/ftp/python/3.12.4/python-3.12.4-amd64.exe)  
