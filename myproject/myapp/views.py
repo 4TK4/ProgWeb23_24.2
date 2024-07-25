@@ -11,13 +11,17 @@ from .utils import formatta_data, get_contratto, get_SIM, get_telefonata
 from .models import ContrattoTelefonico, SIMAttiva, SIMDisattiva, SIMNonAttiva, Telefonata
 
 
+
+#__________________________________HOME_____________________________________#
 #controller che chiama la pagina index.html
 @csrf_exempt
 def home(request):
     return render(request, 'index.html')
 
 
-#controller che chiama la pagina contrattoTelefonico.html
+
+#__________________________________CONTRATTO TELEFONICO_____________________________________#
+#controller che costruisce il contesto da passare al template contrattoTelefonico.html
 @csrf_exempt
 def contrattoTelefonico(request):
     numero = request.POST.get("Numero", "") if request.method == 'POST' else request.GET.get("Numero", "") 
@@ -47,7 +51,13 @@ def contrattoTelefonico(request):
     return render(request, 'contrattoTelefonico.html', context)
 
 
-#controller per l'inserimento di un nuovo contratto
+
+#__________________________________INSERIMENTO NUOVO CONTRATTO_____________________________________#
+#controller per l'inserimento di un nuovo contratto, invocato quando si preme il pulsante 
+#'Inserisci' del modal per l'aggiunta di un nuovo contratto.
+#Se esiste già un contratto con il numero di telefono specificato, allora la richiesta viene re-indirizzata 
+#al controller inserimento_fallito; se invece l'inserimento va a buon fine, allora la richiesta
+#viene re-indirizzata al controller inserimento_successo
 @csrf_exempt 
 def inserisci_contratto(request):
     if request.method == "POST":
@@ -61,6 +71,8 @@ def inserisci_contratto(request):
         # Validazione e gestione dei valori vuoti
         minuti_residui = minuti_residui if minuti_residui else None
         credito_residuo = credito_residuo if credito_residuo else None
+        
+        #query per verificare se è già presente un contratto con il numero di telefono specificato. 
         controllo_query = """SELECT COUNT(*) FROM contrattotelefonico WHERE Numero = %s"""
         try:
             with connection.cursor() as cursor:
@@ -69,6 +81,8 @@ def inserisci_contratto(request):
                 
                 if count > 0:
                     return redirect(reverse('inserimento_fallito'))    
+            
+            #query per l'inserimento della tupla nella tabella dei contratti
             query = """
                 INSERT INTO contrattotelefonico (Numero, DataAttivazione, Tipo, MinutiResidui, CreditoResiduo)
                 VALUES (%s, %s, %s, %s, %s)
@@ -77,11 +91,11 @@ def inserisci_contratto(request):
             try:
                 with connection.cursor() as cursor:
                     cursor.execute(query, (numero, data_attivazione, tipo, minuti_residui, credito_residuo))
-                connection.commit()  # Assicurati di avere le parentesi per eseguire il commit
+                connection.commit() 
             except Exception as e:
                 error = str(e)
-                # Gestisci l'errore (ad esempio, loggalo o passalo al contesto per la visualizzazione)
                 print(error)
+
 
             return redirect(reverse('inserimento_successo'))
         except Exception as e:
@@ -99,6 +113,8 @@ def inserimento_fallito(request):
     return render(request, 'inserimento_fallito.html')
 
 
+
+#__________________________________MODIFICA DI UN CONTRATTO_____________________________________#
 #controller per la modifica di un contratto
 @csrf_exempt 
 def modifica_contratto(request):
@@ -133,23 +149,35 @@ def modifica_successo(request):
     return render(request, 'modifica_successo.html')
 
 
-#controller per l'eliminazione di un contratto
+
+#__________________________________ELIMINAZIONE DI UN CONTRATTO_____________________________________#
+#controller per l'eliminazione di un contratto, che re-indirizza la richiesta sul controller elimina_successo
 @csrf_exempt
 def elimina_contratto(request, numero):
-    query = "DELETE FROM contrattotelefonico WHERE Numero = %s"
+    #se elimino un contratto, elimino anche le sim e le telefonate ad esso associate
+    queries = [
+        "DELETE FROM telefonata WHERE EffettuataDa = %s",
+        "DELETE FROM simattiva WHERE AssociataA = %s",
+        "DELETE FROM simdisattiva WHERE EraAssociataA = %s",
+        "DELETE FROM contrattotelefonico WHERE Numero = %s"
+    ]
     try:
         with connection.cursor() as cursor:
-            cursor.execute(query, [numero])
+            for query in queries:
+                cursor.execute(query, [numero])
     except Exception as e:
         error = str(e)
         return redirect('numero', {'error': error})
     return redirect(reverse('elimina_successo'))
 
+#controller che chiama la pagina elimina_successo.html, in cui semplicemente si visualizza un messaggio di avvenuta eliminazione
 def elimina_successo(request):
     return render(request, 'elimina_successo.html')
 
 
-#controller che chiama la pagina sim.html
+
+#__________________________________SIM_____________________________________#
+#controller che costruisce il contesto da passare al template sim.html
 @csrf_exempt
 def sim(request):
     codice = request.POST.get("Codice", "")
@@ -176,7 +204,9 @@ def sim(request):
     return render(request, '../templates/sim.html', context)
 
 
-#controller che chiama la pagina telefonata.html
+
+#__________________________________TELEFONATA_____________________________________#
+#controller che costruisce il contesto da passare al template telefonata.html
 @csrf_exempt
 def telefonata(request):
     effettuata_da = request.POST.get("EffettuataDa", "") if request.method == 'POST' else request.GET.get("EffettuataDa", "")

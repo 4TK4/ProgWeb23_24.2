@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
+<!--contenuto dell'elemento <title>-->
 {% block title %}SIM{% endblock %}
 
+<!--contenuto dell'elemento <main>-->
 {% block content %}
-
-
 <div class="row">
     <div class="col-md-2">
         <!-- Filtro di ricerca -->
@@ -59,7 +59,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Itera sulle SIM -->
+                <!-- Itero sulle SIM per popolare la tabella-->
                 {% for result in results %}
                 <tr>
                     <td class="text-center">{{ result.Codice }}</td>

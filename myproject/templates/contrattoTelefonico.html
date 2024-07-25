@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<!--contenuto dell'elemento <title>-->
+{% block title %}Contratto Telefonico{% endblock %}
+
+<!--contenuto dell'elemento <main>-->
 {% block content %}
 
-<!-- Modale Eliminazione -->
+<!-- Modale Eliminazione, per chiedere all'utente se è sicuro di voler eliminare il contratto in questione-->
 <div id="Alert" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -21,7 +25,8 @@
     </div>
 </div>
 
-<!-- Modale Modifica Contratto -->
+<!-- Modale Modifica Contratto, per chiedere all'utente il tipo di contratto e i minuti residui o il credito residuo,
+ a seconda del tipo di contratto specificato -->
 <div class="modal fade" id="Modify" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -35,6 +40,9 @@
                     <div class="mb-3">
                         <label for="modalNumero" class="form-label">Numero</label>
                         <p id="modalNumero" class="form-control-plaintext"></p>
+                        
+                        <!--campo di input nascosto, che viene compilato dal codice javascript con il valore del numero di telefono 
+                        del contratto in questione, per essere passato al controller modifica_contratto-->
                         <input type="hidden" name="Numero" id="hiddenNumero">
                     </div>
                     <div class="mb-3">
@@ -67,7 +75,8 @@
     </div>
 </div>
 
-<!-- Modale Inserimento Contratto -->
+<!-- Modale Inserimento Contratto, per chiedere all'utente numero, data attivazione, e tipo del contratto da creare, e minuti residui o 
+ credito residuo a seconda del tipo selezionato -->
 <div id="Insert" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="insertModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -115,7 +124,7 @@
     </div>
 </div>
 
-
+<!--Pagina principale, cioè filtro di ricerca e tabella dei contratti-->
 <div class="row rowContratto">
     <div class="col-md-2">
         <!-- Filtro di ricerca -->
@@ -162,7 +171,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Itera sui contratti -->
+                <!-- Itero sui contratti per riempire la tabella -->
                 {% for result in results %}
                 <tr>
                     <td class="text-center" id="tNumero">{{ result.Numero }}</td>
@@ -190,6 +199,4 @@
         </table>
     </div>
 </div>
-
-<script src="{% static 'js/script.js' %}"></script>
 {% endblock %}

@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+<!--contenuto dell'elemento <title>-->
 {% block title %}Telefonata{% endblock %}
 
+<!--contenuto dell'elemento <main>-->
 {% block content %}
 
 <div class="row">
@@ -39,7 +41,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Itera sulle telefonate -->
+                <!-- Itero sulle telefonate per popolare la tabella-->
                 {% for result in results %}
                 <tr>
                     <td class="text-center">{{ result.ID }}</td>

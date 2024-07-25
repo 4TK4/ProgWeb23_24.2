@@ -3,6 +3,8 @@
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 
+
+
 #funzione per formattare la data da yyyy/mm/dd a dd/mm/yy
 def formatta_data(data):
     try:
@@ -13,20 +15,35 @@ def formatta_data(data):
         risultato = None
     return risultato
 
+
+
 #funzione che genera la query per il riempimento della tabella dei contratti in base ai filtri di ricerca inseriti
 @csrf_exempt
 def get_contratto(numero, data_attivazione, tipo):
     query = """
         SELECT
             c.*,
-            (SELECT COUNT(*) FROM telefonata t WHERE t.EffettuataDa = c.Numero) AS Telefonate,
-            (SELECT s.Codice FROM simattiva s WHERE s.AssociataA = c.Numero) AS SIMAttiva,
-            (SELECT COUNT(*) FROM simdisattiva sd WHERE sd.EraAssociataA = c.Numero) AS SIMDisattive
+            COALESCE(t.Telefonate, 0) AS Telefonate,  
+            s.Codice AS SIMAttiva,
+            COALESCE(sd.SIMDisattive, 0) AS SIMDisattive
         FROM
             contrattotelefonico c
+        LEFT JOIN (
+            SELECT EffettuataDa, COUNT(*) AS Telefonate
+            FROM telefonata
+            GROUP BY EffettuataDa
+        ) t ON t.EffettuataDa = c.Numero
+        LEFT JOIN simattiva s ON s.AssociataA = c.Numero
+        LEFT JOIN (
+            SELECT EraAssociataA, COUNT(*) AS SIMDisattive
+            FROM simdisattiva
+            GROUP BY EraAssociataA
+        ) sd ON sd.EraAssociataA = c.Numero
         WHERE
             1=1
     """
+    #COALESCE usata per inserire 0 quando il valore è None
+    #i LEFTJOIN servono per ragioni di efficienza, altrimenti si avrebbero ritardi più consistenti
     params = []
 
     if numero:
@@ -40,6 +57,7 @@ def get_contratto(numero, data_attivazione, tipo):
         params.append(tipo)
 
     return query, params
+
 
 
 #funzione che genera la query per il riempimento della tabella delle SIM in base ai filtri di ricerca inseriti
@@ -123,6 +141,7 @@ def get_SIM(codice, numero, tipo, stato):
             params.append(tipo)
 
     return query, params
+
 
 
 #funzione che genera la query per il riempimento della tabella delle telefonate in base ai filtri di ricerca inseriti

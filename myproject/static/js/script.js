@@ -1,9 +1,12 @@
+/*funzione invocata quando si preme il pulsante elimina associato ad un contratto,
+per gestire il modal dell'eliminazione e l'eliminazione stessa del contratto*/
 function setEliminazione(numero) {
   const alertModal = new bootstrap.Modal(document.getElementById('Alert'));
   alertModal.show();
 
   const elimButton = document.getElementById('confirmDelete');
 
+  //quando viene premuto l'elimButton si invoca il controller elimina_contratto
   const handleElimination = function () {
     alertModal.hide();
     window.location.replace(`/elimina_contratto/${numero}/`);
@@ -12,6 +15,25 @@ function setEliminazione(numero) {
   elimButton.addEventListener('click', handleElimination, { once: true });
 }
 
+
+
+/*funzione invocata quando viene premuto il pulsante modifica associato ad un contratto,
+per gestire il modal della modifica e la modifica stessa del contratto*/
+function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResiduo) {
+  const modifyModal = new bootstrap.Modal(document.getElementById("Modify"));
+  modifyModal.show();
+  //predispongo i testi e gli input del modal
+  document.getElementById("modalNumero").textContent = numero;
+  document.getElementById("modalDataAttivazione").textContent = dataAttivazione;
+  document.getElementById("Tipo").value = tipo;
+  document.getElementById("MinutiResidui").value = minutiResidui || '';
+  document.getElementById("CreditoResiduo").value = creditoResiduo || '';
+  document.getElementById("hiddenNumero").value = numero;
+  showHideFields();
+}
+
+/*funzione che gestisce la visibilità dei campi di input del modal di modifica del contratto:
+se il contratto è a ricarica bisogna inserire il credito residuo; se è a consumo bisogna inserire i minuti residui*/
 function showHideFields() {
   const tipoContratto = document.getElementById("Tipo").value;
   const minutiResiduiGroup = document.getElementById("minutiResiduiGroup");
@@ -27,19 +49,10 @@ function showHideFields() {
     creditoResiduoGroup.style.display = "none";
   }
 }
-function setModifica(numero, dataAttivazione, tipo, minutiResidui, creditoResiduo) {
-  const modifyModal = new bootstrap.Modal(document.getElementById("Modify"));
-  modifyModal.show();
-  document.getElementById("modalNumero").textContent = numero;
-  document.getElementById("modalDataAttivazione").textContent = dataAttivazione;
-  document.getElementById("Tipo").value = tipo;
-  document.getElementById("MinutiResidui").value = minutiResidui || '';
-  document.getElementById("CreditoResiduo").value = creditoResiduo || '';
-  document.getElementById("hiddenNumero").value = numero;
-  showHideFields();
-}
 
-
+/*funzione invocata quando viene premuto il pulsante aggiorna del modal di modifica contratto, 
+per verificare la validità dei dari inseriti. Se ci sono errori, compaiono degli warning.
+Se tutto va bene, i datidella form vengono inviati*/
 function controlloModifica() {
   const tipo = document.getElementById("Tipo").value;
   const minutiResidui = document.getElementById("MinutiResidui").value;
@@ -91,6 +104,8 @@ function showHideFieldsInsert() {
   }
 }
 
+/*funzione invocata quando viene premuto il pulsante 'Aggiungi nuovo contratto' e che mostra 
+il modale per la creazione di un nuovo contratto*/
 function setInsert() {
   const insertModal = new bootstrap.Modal(document.getElementById("Insert"));
   insertModal.show();
@@ -166,7 +181,7 @@ window.onresize = modificaTestoMail;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//metodi necessari per l'ordinamento di una tabella, data la posizione del campo da considerare(n), il tipo del dato del campo e l'id della tabella su cui si sta lavorando
+//funzioni per l'ordinamento di una tabella, data la posizione del campo da considerare(n), il tipo del dato del campo e l'id della tabella su cui si sta lavorando
 function sortTable(n, type, tableID) {
   const table = document.getElementById(tableID);
   const rows = Array.from(table.rows).slice(1); // Ottengo tutte le righe tranne l'intestazione
@@ -199,7 +214,7 @@ function sortTable(n, type, tableID) {
   });
 }
 
-//metodo per passare da gg/mm/aaaa a aaaa/mm/gg
+//mfunzione per passare da gg/mm/aaaa a aaaa/mm/gg
 function parseDate(dateString) {
   const parts = dateString.split("/");
   const day = parseInt(parts[0], 10);
@@ -208,7 +223,7 @@ function parseDate(dateString) {
   return new Date(year, month, day);
 }
 
-//metodo che esegue il confronto fra due valori, in base al loro tipo e al criterio di ordinamento (asc/desc)
+//funzione che esegue il confronto fra due valori, in base al loro tipo e al criterio di ordinamento (asc/desc)
 function compareValues(x, y, type, dir) {
   if (type === "num") {
     x = parseFloat(x);

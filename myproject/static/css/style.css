@@ -108,24 +108,6 @@ header h1 {
     transition: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-/* .btn {
-    font-size: 1.2vw;
-    padding: 1.5% 2%;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: white;
-    margin-right: 2%;
-    margin-bottom: 2%;
-    font-weight: bold;
-} */
-
-/* .btn:hover {
-    background-color: #ccc;
-    border-color: #ccc;
-    color: #fff;
-    text-shadow: -0.8px 0 black, 0 0.8px black, 0.8px 0 black, 0 -0.8px black;
-
-} */
 
 .elimina {
     color: var(--primary-color);
