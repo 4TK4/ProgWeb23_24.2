@@ -3,7 +3,7 @@
 Progetto di gruppo per la realizzazione di un sito web relativo ad un gestionale per database di un'impresa di telefonia
 ## Membri
 1081134 - Colombo Lorenzo  
-10 - Poloni Luca  
+1078817 - Poloni Luca  
 10 - Brasi Alessandro
 ## Installation
 ### Python
