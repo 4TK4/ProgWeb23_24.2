@@ -177,8 +177,8 @@
                     <td class="text-center" id="tNumero">{{ result.Numero }}</td>
                     <td class="text-center" id="tDataAtt">{% if result.DataAttivazione is not None %} {{ result.DataAttivazione }} {% endif %} </td>
                     <td class="text-center" id="tTipo">{% if result.Tipo is not None %} {{ result.Tipo }} {% endif %}</td>
-                    <td class="text-center" id="tMinRes">{% if result.Tipo == "a consumo" and result.MinutiResidui is not None %} {{ result.MinutiResidui }} {% endif %}</td>
-                    <td class="text-center" id="tCredRes">{% if result.Tipo == "a ricarica" and result.CreditoResiduo is not None %} {{ result.CreditoResiduo }} {% endif %}</td>
+                    <td class="text-center" id="tMinRes">{% if result.Tipo == "a consumo" %} {{ result.MinutiResidui | default:0}} {% endif %}</td>
+                    <td class="text-center" id="tCredRes">{% if result.Tipo == "a ricarica" %} {{ result.CreditoResiduo | default:0 }} {% endif %}</td>
                     <td class="text-center" id="tTelefonate">{% if result.Telefonate is not 0 %} <a href="{% url 'telefonata' %}?EffettuataDa={{ result.Numero }}">{{ result.Telefonate }}</a>{% else%} {{ result.Telefonate }} {% endif %}</td>
                     <td class="text-center" id="tSIMAttiva">{% if result.SIMAttiva is not None %} <a href="{% url 'sim' %}?Stato=Attiva&Numero={{ result.Numero }}">{{ result.SIMAttiva }}</a>{% endif %}</td>
                     <td class="text-center" id="tSIMDisattive">{% if result.SIMDisattive is not 0 %} <a href="{% url 'sim' %}?Stato=Disattiva&Numero={{ result.Numero }}">{{ result.SIMDisattive }} </a> {% else%} {{ result.SIMDisattive }}{% endif %}</td>
