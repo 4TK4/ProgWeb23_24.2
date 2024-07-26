@@ -41,6 +41,7 @@ def get_contratto(numero, data_attivazione, tipo):
         ) sd ON sd.EraAssociataA = c.Numero
         WHERE
             1=1
+        ORDER BY c.Numero
     """
     #COALESCE usata per inserire 0 quando il valore è None
     #i LEFTJOIN servono per ragioni di efficienza, altrimenti si avrebbero ritardi più consistenti
