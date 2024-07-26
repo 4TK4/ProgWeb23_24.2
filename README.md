@@ -17,17 +17,17 @@ pip --version
 ```
 Se il comando non viene riconosciuto, procedere con l'installazione:  
 1. Scaricare lo script per l'installazione da [qui](https://bootstrap.pypa.io/get-pip.py)  
-2. Apri un terminale/prompt dei comandi, tramite il comando *cd* raggiungi la cartella contenente il file appena scaricato  
-3. Esegui il file:
+2. Aprire un terminale/prompt dei comandi, tramite il comando *cd* raggiungi la cartella contenente il file appena scaricato  
+3. Eseguire il file:
 ```bash
 python get-pip.py
 ```
 ### Django
-Una volta installato pip, procediamo con l'installazione di Django da terminale:  
+Una volta installato pip, procedere con l'installazione di Django da terminale:  
 ```bash
 pip install django
 ```
-Ora procediamo verificando la versione installata:
+Verificare a questo punto la versione installata:
 ```bash
 python -m django --version
 ```
