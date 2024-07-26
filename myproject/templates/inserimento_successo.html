@@ -2,8 +2,13 @@
 
 <!--contenuto dell'elemento <main>-->
 {% block content %}
-<div class="alert alert-success" role="alert">
-  Il contratto è stato inserito con successo!
+<div id="schermataEsito" class="row justify-content-center align-items-center h-100">
+  <div class="col-auto text-center">
+    <div id="contrattoEsito" class="alert alert-success" role="alert">
+      Il contratto è stato inserito con successo!
+    </div>
+    <a href="{% url 'contrattoTelefonico' %}" id="backButton" class="btn search-button d-flex justify-content-center align-items-center">Torna alla lista dei contratti</a>
+  </div>
 </div>
-<a href="{% url 'contrattoTelefonico' %}" class="btn btn-primary">Torna alla lista dei contratti</a>
+
 {% endblock %}

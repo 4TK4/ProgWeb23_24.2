@@ -2,8 +2,14 @@
 
 <!--contenuto dell'elemento <main>-->
 {% block content %}
-<div class="alert alert-danger" role="alert">
-  ATTENZIONE! Purtroppo esiste già un contratto con numero uguale a quello proposto. Si prega di scegliere un numero diverso!
+<div id="schermataEsito" class="row justify-content-center align-items-center h-100">
+  <div class="col-auto text-center">
+    <div id="contrattoEsito" class="alert alert-danger" role="alert">
+      ATTENZIONE! Purtroppo esiste già un contratto con numero uguale a quello proposto. Si prega di scegliere un numero diverso!
+    </div>
+    <a id="backButton" href="{% url 'contrattoTelefonico' %}" class="btn search-button d-inline-flex justify-content-center align-items-center">Torna alla lista dei contratti</a>
+  </div>
+  
 </div>
-<a href="{% url 'contrattoTelefonico' %}" class="btn btn-primary">Torna alla lista dei contratti</a>
+
 {% endblock %}

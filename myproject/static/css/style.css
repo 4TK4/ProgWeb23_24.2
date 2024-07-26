@@ -166,6 +166,7 @@ header h1 {
     }
 }
 
+
 .search-button {
     border: 2px solid var(--primary-color);
     color: var(--white-color);
@@ -230,6 +231,18 @@ th.pointer {
 #tabellaTelefonata td {
     width: calc(100%/6);
 }
+div#schermataEsito{
+    margin: 15vh 0 15vh 0;
+}
+div#contrattoEsito{
+    max-width: fit-content;
+    margin: 20px;
+    font-weight: 700;
+    padding: 25px;
+}
+
+
+
 
 footer {
     background-color: var(--primary-color);

@@ -12,14 +12,14 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">ATTENZIONE!</h2>
+                <h3 class="modal-title">ATTENZIONE!</h3>
             </div>
             <div class="modal-body">
                 <p>Sei sicuro di voler definitivamente eliminare questo contratto?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="confirmDelete" class="btn btn-outline-danger">Elimina</button>
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" id="confirmDelete" class="btn btn-outline-danger search-button">Elimina</button>
+                <button type="button" class="btn btn-outline-primary add-button" data-bs-dismiss="modal">Annulla</button>
             </div>
         </div>
     </div>
@@ -31,7 +31,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modifica Contratto Telefonico</h5>
+                <h3 class="modal-title" id="exampleModalLabel">Modifica Contratto Telefonico</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -68,7 +68,7 @@
                         <input type="number" name="CreditoResiduo" id="CreditoResiduo" class="form-control"/>
                         <div id="creditoResiduoWarning" class="invalid-feedback">Campo obbligatorio</div>
                     </div>
-                    <button type="submit" onclick="controlloModifica()" class="btn btn-primary">Aggiorna</button>
+                    <button type="submit" onclick="controlloModifica()" class="btn btn-outline-success search-button">Aggiorna</button>
                 </form>
             </div>
         </div>
@@ -117,7 +117,7 @@
                         <input type="number" name="CreditoResiduo" id="CreditoResiduo2" class="form-control" />
                         <div id="creditoResiduoWarning2" class="invalid-feedback">Campo obbligatorio</div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Inserisci</button>
+                    <button type="submit" class="btn btn-outline-success search-button">Inserisci</button>
                 </form>
             </div>
         </div>
